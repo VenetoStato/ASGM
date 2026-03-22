@@ -25,8 +25,8 @@ Dopo la modifica, riavvia il gateway (o attendi reload se supportato).
 | Chi | Cosa succede |
 |-----|----------------|
 | **Sistema (automatico)** | Con **fallback** in `openclaw.json`: se il modello primario **fallisce** (errore provider, modello assente, ecc.), OpenClaw prova il **successivo** nella lista (es. passa al **14b**). Non è “intelligenza”: è **failover**. |
-| **Tu (manuale, consigliato quando serve qualità)** | In chat invia un messaggio da solo: **`/model ollama/qwen2.5-coder:14b`** per usare il 14b per quella sessione (o fino a quando non cambi di nuovo). Per tornare veloce: **`/model ollama/qwen2.5-coder:7b`**. Per elenco modelli ammessi: **`/models`**. (Sintassi tipica OpenClaw; vedi anche [TUI](https://docs.openclaw.ai/web/tui).) |
-| **L’agente** | **Non** “decide” da solo di passare al 14b per difficoltà del task, salvo che non sia implementata una skill dedicata. In pratica: **tu** scegli con **`/model`** quando il compito è pesante (refactor grande, debug strano, molto codice). |
+| **Tu (manuale, consigliato quando serve qualità)** | In chat invia un messaggio da solo: **`/model 14`** (alias) oppure **`/model ollama/qwen2.5-coder:14b`**. Per tornare veloce: **`/model 7`**. Elenco: **`/models`**. (Vedi anche [TUI](https://docs.openclaw.ai/web/tui).) |
+| **Frasi trigger + agente** | Se scrivi **«pensaci meglio»** / **«pensaci bene»** / **«rifletti meglio»** (vedi lista in **`AGENTS.md`**), l’agente è istruito a mettere **`/model 14`** come prima riga, poi la risposta. Altrimenti usa tu **`/model 14`** per compiti pesanti. |
 
 **Quando ha senso il 14b:** refactor ampio, bug complesso, patch su più file, ragionamento lungo. Per domande brevi o “trova questo file” il **7b** basta ed è più rapido.
 

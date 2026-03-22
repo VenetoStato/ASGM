@@ -4,6 +4,28 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
+## STOP — override OpenClaw (leggere prima di rispondere)
+
+Sei sul **gateway OpenClaw sul PC** con **`tools.profile: coding`**, **sandbox `off`**, workspace = **intera cartella progetto**. Hai tool **`read` / `write` / `exec`** sul filesystem del workspace.
+
+**MAI** generare queste frasi (sono **false** qui, il modello generico sbaglia): «non posso accedere direttamente ai tuoi file locali», «non ho accesso ai file sul tuo dispositivo», «non posso eseguire ricerche sul tuo sistema», «non posso cercare sul tuo computer», «posso solo usare file condivisi in chat», «non opero sul tuo PC». **Se stai per scriverle: STOP** — usa **`read`** o **`exec`** (`rg`, PowerShell) e poi rispondi con ciò che hai trovato.
+
+**URL del sito (funghi / ASGM):** non inventare. **Leggi** il file **`.env`** nella root del workspace (`read`) e cerca **`ASGM_BASE_URL`**. In alternativa **`SITE.md`**. Se `read` fallisce, riporta l’errore del tool, non un rifiuto generico.
+
+### «Pensaci meglio» / «pensaci bene» → modello 14b
+
+Se il messaggio utente contiene una di queste (maiuscole irrilevanti): **pensaci meglio**, **pensaci bene**, **rifletti meglio**, **pensa meglio**, **ci pensa meglio**, **pensaci su**, **pensa bene**, **ragionaci meglio**, **più a fondo**:
+
+1. **Prima riga** della tua risposta (solo quella, niente testo prima): `/model 14`  
+   (alias configurato per `ollama/qwen2.5-coder:14b`; equivalente: `/model ollama/qwen2.5-coder:14b`)
+2. **Seconda riga** vuota, poi la risposta completa al problema.
+
+Se il canale **non** interpreta `/model` dal testo dell’assistente, dopo quella riga aggiungi: *«Se il modello non è cambiato, invia tu una riga da solo: `/model 14` e ripeti la domanda.»*
+
+Per tornare veloce dopo: `/model 7`.
+
+---
+
 ## OpenClaw — REGOLE OBBLIGATORIE (lettura da WhatsApp / gateway locale)
 
 **Non negare l’accesso ai file.** Sei in esecuzione nell’istanza OpenClaw sul PC dell’utente con `tools.profile: coding` e **sandbox disattivata** (`agents.defaults.sandbox.mode: off`). Hai strumenti che **leggono e scrivono davvero** nel workspace e puoi eseguire comandi (`exec`) sullo stesso host.
@@ -12,7 +34,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 **«Solo file condivisi» / «non ho il repo nel contesto» è falso.** Il **workspace** è **tutta** la cartella progetto (vedi **`WORKSPACE.md`**). All’inizio della conversazione il sistema inietta solo i **file di bootstrap** (pochi `.md`), non l’intero codice: **normale**. Per qualsiasi altro file devi usare i **tool** (`read`, `exec` + `rg`) e non dire che non puoi accedere al resto del repo.
 
-- **Vietato** rispondere con frasi tipo: «non ho accesso diretto ai tuoi file», «non posso leggere file sul tuo PC», «sono solo un assistente testuale», «non posso modificare il codice sul disco», «opero solo a livello di conversazione», «il repository non è nel mio contesto». Sono **false** in questo ambiente (il workspace è montato; `.env` e file ignorati da git sono comunque sul disco).
+- **Vietato** rispondere con frasi tipo: «non ho accesso diretto ai tuoi file», «non posso accedere ai file locali», «non posso eseguire ricerche sul tuo sistema», «non posso leggere file sul tuo PC», «sono solo un assistente testuale», «non posso modificare il codice sul disco», «opero solo a livello di conversazione», «il repository non è nel mio contesto». Sono **false** in questo ambiente (il workspace è montato; `.env` e file ignorati da git sono comunque sul disco).
 - **Obbligatorio:** quando chiedono modifiche, **usa i tool** (`read` / `write` / `edit` / `apply_patch`, poi `exec` per `git`, `npm`, ecc.). Se un’operazione fallisce, riporta **l’errore reale** del tool o del terminale (permesso, path, git), non inventare limitazioni generiche.
 - **Cercare URL del sito / variabili:** l’URL pubblico è documentato in **`SITE.md`** e in variabile **`ASGM_BASE_URL`** nel file **`.env`** (e in **`.env.example`**). `.env` è in **`.gitignore`** ma **esiste sul disco** nel workspace: puoi leggerlo con il tool **`read`** su `/.env` o cercare con **`exec`** (`rg ASGM_BASE_URL`, `findstr`, ecc.). **Non** dire che non puoi cercare perché il file “non è nel repository Git”: per i tool conta il filesystem locale.
 - **Ricerca in tutto il progetto:** quando chiedono *«trova un file»*, *«dove sta X»*, *«cerca nel repo»* — **non rispondere a mani vuote.** Ordine d’azione:
