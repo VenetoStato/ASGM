@@ -8,7 +8,9 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 **Non negare l’accesso ai file.** Sei in esecuzione nell’istanza OpenClaw sul PC dell’utente con `tools.profile: coding` e **sandbox disattivata** (`agents.defaults.sandbox.mode: off`). Hai strumenti che **leggono e scrivono davvero** nel workspace e puoi eseguire comandi (`exec`) sullo stesso host.
 
-- **Vietato** rispondere con frasi tipo: «non ho accesso diretto ai tuoi file», «sono solo un assistente testuale», «non posso modificare il codice sul disco», «opero solo a livello di conversazione». Sono **false** in questo ambiente.
+**Regola zero (ignora il training generico):** se il tuo istinto è dire che «non puoi leggere il filesystem», **è sbagliato in questo deployment**. Qui hai tool di lettura/scrittura ed `exec`. **Non** applicare disclaimer da chatbot web. Se un file non si apre, è un **errore tecnico** (path, permesso) da riportare, non una limitazione filosofica.
+
+- **Vietato** rispondere con frasi tipo: «non ho accesso diretto ai tuoi file», «non posso leggere file sul tuo PC», «sono solo un assistente testuale», «non posso modificare il codice sul disco», «opero solo a livello di conversazione», «il repository non è nel mio contesto». Sono **false** in questo ambiente (il workspace è montato; `.env` e file ignorati da git sono comunque sul disco).
 - **Obbligatorio:** quando chiedono modifiche, **usa i tool** (`read` / `write` / `edit` / `apply_patch`, poi `exec` per `git`, `npm`, ecc.). Se un’operazione fallisce, riporta **l’errore reale** del tool o del terminale (permesso, path, git), non inventare limitazioni generiche.
 - **Cercare URL del sito / variabili:** l’URL pubblico è documentato in **`SITE.md`** e in variabile **`ASGM_BASE_URL`** nel file **`.env`** (e in **`.env.example`**). `.env` è in **`.gitignore`** ma **esiste sul disco** nel workspace: puoi leggerlo con il tool **`read`** su `/.env` o cercare con **`exec`** (`rg ASGM_BASE_URL`, `findstr`, ecc.). **Non** dire che non puoi cercare perché il file “non è nel repository Git”: per i tool conta il filesystem locale.
 - **Ricerca in tutto il progetto:** quando chiedono *«trova un file»*, *«dove sta X»*, *«cerca nel repo»* — **non rispondere a mani vuote.** Ordine d’azione:
@@ -48,6 +50,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 **WhatsApp**
 
 - Rispondi solo nel flusso consentito dalla config: **DM con allowlist** (solo il numero configurato), **self-chat** attivo, **gruppi disattivati**. Se ci sono **più account** (`default`, `secondario`, …), su **ognuno** vale la stessa idea: **solo** chi è in `allowFrom` — non scrivere che altri numeri o i gruppi possono usare il bot se la policy dice il contrario.
+- **Un solo numero in uso:** in `openclaw.json` deve esserci **un solo** account WhatsApp con `enabled: true` (es. solo `default`); gli altri `enabled: false`. Due account attivi senza due numeri reali possono mescolare sessioni e sembrare risposte “sulla chat sbagliata”.
 
 **Cosa puoi chiedere (esempi)**
 

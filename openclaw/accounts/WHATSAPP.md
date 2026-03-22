@@ -35,6 +35,12 @@ Se il comando non accetta `--channel`, usa solo `channels login --account second
 
 La documentazione ufficiale OpenClaw descrive account multipli e binding; questa nota è **policy + passi** per questo hub.
 
+## Un solo numero WhatsApp: evitare “due account” attivi
+
+Se **non** hai un secondo numero/SIM dedicato, lascia **un solo** account WhatsApp in `channels.whatsapp.accounts` con `enabled: true` (di solito `default`) e imposta **`secondario` → `enabled: false`**.
+
+Due provider attivi con la **stessa** allowlist sullo **stesso** utente possono dare l’impressione che le risposte “saltino” tra contesti o chat. Quando avrai un secondo numero reale, riattiva `secondario`, fai `channels login --account secondario` e riavvia il gateway.
+
 ## Separazione ruoli
 
 | Canale | Uso |
