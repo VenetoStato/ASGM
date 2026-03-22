@@ -28,7 +28,7 @@ Riavvia il terminale (o il PC) dopo il primo set della variabile d’ambiente, p
    ```powershell
    npm run openclaw:gateway
    ```
-   Poi **canale** (es. **WhatsApp**): messaggio in **chat diretta** all’account collegato (DM), dopo eventuale **pairing**. L’agente usa il modello configurato (`14b` → se assente in disco, fallback **`7b`**).
+   Poi **canale** (es. **WhatsApp**): messaggio in **chat diretta** all’account collegato (DM), dopo eventuale **pairing**. L’agente usa il modello configurato (`7b` primario per latenza; **`14b`** nei fallback se serve più qualità).
 
 3. **Modelli disponibili per OpenClaw:**
    ```powershell

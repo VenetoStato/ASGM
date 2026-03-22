@@ -6,6 +6,7 @@ Il **gateway OpenClaw** deve girare qui (Windows), sempre acceso quando vuoi Wha
 - **URL del sito** — vedi [`SITE.md`](../SITE.md) nella radice del repo (variabile `ASGM_BASE_URL` in `.env`).
 - **Rinomina repo / struttura** — [`docs/REPOSITORY.md`](../docs/REPOSITORY.md).
 - **Workspace (tutta la repo, non “solo file condivisi”)** — [`WORKSPACE.md`](../WORKSPACE.md). In chat puoi inviare **`/context list`** o **`/context detail`** per vedere cosa è iniettato nel prompt (documentazione OpenClaw).
+- **Risposta più veloce / contesto snello** — [`PERFORMANCE.md`](PERFORMANCE.md) (modello 7b vs 14b, `/compact`, meno giri di tool).
 
 ## Config attuale su questo PC (`~/.openclaw/openclaw.json`)
 

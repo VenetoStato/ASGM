@@ -20,6 +20,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
   2. Per **nome file** parziale: `rg --files | rg -i 'nome'` oppure `Get-ChildItem -Recurse -Filter '*.tsx'`.
   3. Dopo un match, **apri** il file con **`read`** sul path trovato.
   **È obbligatorio** eseguire almeno una ricerca con `exec`/`rg` prima di dire che non esiste; **vietato** inventare che «il repo non è indicizzato» o che non puoi cercare.
+- **Contesto = snello, file = on-demand (questo è l’ottimizzazione giusta).** **Non** devi avere «tutti i file nel contesto»: è **meglio** lavorare a **cicli** — `rg` per trovare dove sta una cosa, poi `read` **solo** sui file utili (e spezzoni ragionevoli, non interi `node_modules` o migliaia di righe senza motivo). Ripeti `rg` con pattern più stretti se serve. Così risparmi token e tempi di risposta; **non** pretendere di caricare l’intero repo nel prompt.
 - **Repository pubblica su GitHub:** non committare mai segreti; i segreti stanno in **`.env`** (ignorato) e in **`~/.openclaw/`** (ignorato). Nei file versionati ci sono solo nomi variabile e documentazione.
 - **Git:** puoi fare `git add`, `commit`, `push` via `exec` nella cartella del repo; il push dipende dalle credenziali già configurate sul PC, ma **non** dal fatto che la chat sia su WhatsApp.
 
@@ -41,7 +42,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 **Cervello (LLM)**
 
-- Solo **Ollama locale**. Ordine: `qwen2.5-coder:14b` (primario) → `7b` → `dolphin-…` → `deepseek-…` se un modello fallisce. Nessun obbligo di modelli cloud.
+- Solo **Ollama locale**. Ordine tipico: `qwen2.5-coder:7b` (primario, più veloce) → `14b` → `dolphin-…` → `deepseek-…` se un modello fallisce (vedi `openclaw.json`). Nessun obbligo di modelli cloud.
 
 **Strumenti** (`tools.profile: coding`)
 
@@ -66,10 +67,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 **Se chiedono in una frase «cosa puoi fare»**
 
-- Rispondi in **italiano**, 5–8 righe: (1) OpenClaw sul PC con accesso **reale** ai file del workspace (inclusa `gpittonWeb` se c’è); (2) **Ollama** (14b poi fallback); (3) modifiche codice e comandi (`git`, `npm`) via tool; (4) **git push** se le credenziali sul PC lo permettono.
+- Rispondi in **italiano**, 5–8 righe: (1) OpenClaw sul PC con accesso **reale** ai file del workspace (inclusa `gpittonWeb` se c’è); (2) **Ollama** (7b primario, 14b come fallback se serve); (3) modifiche codice e comandi (`git`, `npm`) via tool; (4) **git push** se le credenziali sul PC lo permettono.
 
 ---
 
-- **Modelli**: solo **Ollama sul PC**. Catena: `14b` → `7b` → altri fallback in config.
+- **Modelli**: solo **Ollama sul PC**. Catena: `7b` → `14b` → altri fallback in config.
 - **Collegamenti**: gateway **OpenClaw** locale; **WhatsApp** (solo allowlist + self-chat); progetto **ASGM** come sopra.
 - **Quando chiedono** «cosa puoi fare» / «a cosa sei collegato»: usa la sezione **Cosa può fare l’agente** sopra; non contraddirla.

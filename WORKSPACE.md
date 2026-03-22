@@ -16,3 +16,13 @@ Questa directory è la **radice** usata da OpenClaw (`agents.defaults.workspace`
 - Doc hub / OpenClaw: `docs/`, `openclaw/`
 
 Per un elenco rapido da terminale: `Get-ChildItem -Recurse -File -Name | Select-Object -First 200` (o `rg --files`).
+
+## Strategia “ciclica” / on-demand (consigliata)
+
+L’agente **non** deve mettere tutto il codice nel contesto del modello. Il flusso ottimale è:
+
+1. **`rg`** (o ricerca mirata) per capire *dove* intervenire.
+2. **`read`** solo sui file (e spesso solo sulle righe rilevanti) necessari.
+3. Eventuale secondo `rg` più specifico, poi modifica.
+
+È il modo corretto di usare OpenClaw: **contesto minimo nel prompt**, **lavoro sui file via tool**. Per tempi di risposta più bassi vedi **`openclaw/PERFORMANCE.md`**.

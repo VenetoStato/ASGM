@@ -1,6 +1,6 @@
 # TOOLS.md - Local Notes
 
-- **Intera repo = workspace:** vedi **`WORKSPACE.md`** in radice (non è solo una “cartella condivisa”; i tool operano su tutto il tree sotto la radice OpenClaw).
+- **Intera repo = workspace:** vedi **`WORKSPACE.md`** in radice (non è solo una “cartella condivisa”; i tool operano su tutto il tree sotto la radice OpenClaw). Strategia on-demand e latenza: **`openclaw/PERFORMANCE.md`**.
 
 ## Workspace (OpenClaw)
 
