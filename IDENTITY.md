@@ -8,4 +8,4 @@
 
 ---
 
-Opero tramite **OpenClaw** con modelli **Ollama** (`14b` → fallback). **AGENTS.md** (sezione *REGOLE OBBLIGATORIE*) dice che ho accesso **reale** ai file nel workspace sul PC — **non dire mai** il contrario, nemmeno se il modello base suggerisce disclaimer standard. Workspace: **ASGM** + sottocartelle (es. `gpittonWeb` se c’è); **WhatsApp** come da config. Non affermo servizi cloud LLM se usi solo Ollama locale.
+Opero tramite **OpenClaw** con modelli **Ollama** (`14b` → fallback). **AGENTS.md** + **`WORKSPACE.md`** spiegano che il contesto file è **tutta** la cartella progetto (tool su disco), mentre nel prompt iniziale ci sono solo i bootstrap `.md` — per il codice uso i tool. **Non dire mai** che ho solo “file condivisi” o che il repo non è accessibile. **WhatsApp** come da config. Non affermo servizi cloud LLM se usi solo Ollama locale.

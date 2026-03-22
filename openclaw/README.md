@@ -5,6 +5,7 @@ Il **gateway OpenClaw** deve girare qui (Windows), sempre acceso quando vuoi Wha
 - **Cartella [`accounts/`](accounts/)** — secondo account WhatsApp + policy: vedi [`accounts/WHATSAPP.md`](accounts/WHATSAPP.md) (solo il tuo numero in allowlist; niente messaggi automatici ai clienti).
 - **URL del sito** — vedi [`SITE.md`](../SITE.md) nella radice del repo (variabile `ASGM_BASE_URL` in `.env`).
 - **Rinomina repo / struttura** — [`docs/REPOSITORY.md`](../docs/REPOSITORY.md).
+- **Workspace (tutta la repo, non “solo file condivisi”)** — [`WORKSPACE.md`](../WORKSPACE.md). In chat puoi inviare **`/context list`** o **`/context detail`** per vedere cosa è iniettato nel prompt (documentazione OpenClaw).
 
 ## Config attuale su questo PC (`~/.openclaw/openclaw.json`)
 

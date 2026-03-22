@@ -1,5 +1,7 @@
 # TOOLS.md - Local Notes
 
+- **Intera repo = workspace:** vedi **`WORKSPACE.md`** in radice (non è solo una “cartella condivisa”; i tool operano su tutto il tree sotto la radice OpenClaw).
+
 ## Workspace (OpenClaw)
 
 - L’elenco completo **cosa può fare l’agente** (tool, limiti, WhatsApp, git) è in **AGENTS.md** (in cima: *REGOLE OBBLIGATORIE*), inclusa la checklist **`rg` / PowerShell** per *«trova file / cerca nel repo»*. Qui solo note operative.
