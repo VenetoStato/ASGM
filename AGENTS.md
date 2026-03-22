@@ -11,7 +11,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - **Vietato** rispondere con frasi tipo: «non ho accesso diretto ai tuoi file», «sono solo un assistente testuale», «non posso modificare il codice sul disco», «opero solo a livello di conversazione». Sono **false** in questo ambiente.
 - **Obbligatorio:** quando chiedono modifiche, **usa i tool** (`read` / `write` / `edit` / `apply_patch`, poi `exec` per `git`, `npm`, ecc.). Se un’operazione fallisce, riporta **l’errore reale** del tool o del terminale (permesso, path, git), non inventare limitazioni generiche.
 - **Cercare URL del sito / variabili:** l’URL pubblico è documentato in **`SITE.md`** e in variabile **`ASGM_BASE_URL`** nel file **`.env`** (e in **`.env.example`**). `.env` è in **`.gitignore`** ma **esiste sul disco** nel workspace: puoi leggerlo con il tool **`read`** su `/.env` o cercare con **`exec`** (`rg ASGM_BASE_URL`, `findstr`, ecc.). **Non** dire che non puoi cercare perché il file “non è nel repository Git”: per i tool conta il filesystem locale.
-- **Ricerca in tutto il progetto:** per trovare stringhe, percorsi o nomi file usa **`exec`** con `rg` / `findstr` / PowerShell `Get-ChildItem -Recurse` dalla radice workspace, oppure i tool di lettura elenco file. **È obbligatorio** tentare prima di dire che non trovi qualcosa.
+- **Ricerca in tutto il progetto:** quando chiedono *«trova un file»*, *«dove sta X»*, *«cerca nel repo»* — **non rispondere a mani vuote.** Ordine d’azione:
+  1. **`exec`** dalla radice workspace con **`rg -i --files -g '*pattern*'`** oppure **`rg -n "stringa"`** (se `rg` non c’è: PowerShell `Get-ChildItem -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -like '*parte*' }`).
+  2. Per **nome file** parziale: `rg --files | rg -i 'nome'` oppure `Get-ChildItem -Recurse -Filter '*.tsx'`.
+  3. Dopo un match, **apri** il file con **`read`** sul path trovato.
+  **È obbligatorio** eseguire almeno una ricerca con `exec`/`rg` prima di dire che non esiste; **vietato** inventare che «il repo non è indicizzato» o che non puoi cercare.
 - **Repository pubblica su GitHub:** non committare mai segreti; i segreti stanno in **`.env`** (ignorato) e in **`~/.openclaw/`** (ignorato). Nei file versionati ci sono solo nomi variabile e documentazione.
 - **Git:** puoi fare `git add`, `commit`, `push` via `exec` nella cartella del repo; il push dipende dalle credenziali già configurate sul PC, ma **non** dal fatto che la chat sia su WhatsApp.
 
@@ -43,7 +47,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 **WhatsApp**
 
-- Rispondi solo nel flusso consentito dalla config: **DM con allowlist** (solo il numero configurato), **self-chat** attivo, **gruppi disattivati**. Non scrivere che puoi scrivere in gruppi o ad altri numeri se non sono in policy.
+- Rispondi solo nel flusso consentito dalla config: **DM con allowlist** (solo il numero configurato), **self-chat** attivo, **gruppi disattivati**. Se ci sono **più account** (`default`, `secondario`, …), su **ognuno** vale la stessa idea: **solo** chi è in `allowFrom` — non scrivere che altri numeri o i gruppi possono usare il bot se la policy dice il contrario.
 
 **Cosa puoi chiedere (esempi)**
 

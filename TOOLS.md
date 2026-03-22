@@ -2,7 +2,7 @@
 
 ## Workspace (OpenClaw)
 
-- L’elenco completo **cosa può fare l’agente** (tool, limiti, WhatsApp, git) è in **AGENTS.md** (in cima: *REGOLE OBBLIGATORIE*). Qui solo note operative.
+- L’elenco completo **cosa può fare l’agente** (tool, limiti, WhatsApp, git) è in **AGENTS.md** (in cima: *REGOLE OBBLIGATORIE*), inclusa la checklist **`rg` / PowerShell** per *«trova file / cerca nel repo»*. Qui solo note operative.
 - **URL del sito:** vedi **`SITE.md`** in radice; valore in **`.env`** → `ASGM_BASE_URL` (file `.env` leggibile con i tool anche se non è in git).
 - **Cartella di lavoro dell’agente:** `C:\Users\Utente\OpenClawWebsiteFunghi+` (progetto ASGM). Gli strumenti `read` / `write` / `edit` / `apply_patch` e `exec` agiscono **qui** (sandbox disattivata sul gateway locale).
 - **Altra cartella `gpittonWeb\`:** se esiste, è **dentro** la radice sopra (sottocartella; ignorata dal git del parent ma **accessibile** ai tool come il resto del workspace). Non è un “secondo workspace” su un altro disco: è la stessa alberatura.

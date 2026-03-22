@@ -18,16 +18,22 @@ Per **ogni** account WhatsApp sotto `channels.whatsapp.accounts.<id>`:
 
 Così **nessun cliente** riceve messaggi dall’agente finché non è esplicitamente nella policy (e in generale **non** mettere clienti in `allowFrom` se non vuoi che parlino col bot).
 
-## Collegare il secondo account
+## Collegare il secondo account (stesso gateway, due numeri WhatsApp)
 
-1. Aggiungi in `~/.openclaw/openclaw.json` un secondo id sotto `channels.whatsapp.accounts` (es. `"lavoro": { … }`).
-2. Esegui il login dedicato:
+L’obiettivo è **due sessioni WhatsApp** (es. personale + SIM attività), **ma** su **entrambe** solo **il tuo numero** in `allowFrom` — così clienti e sconosciuti **non** parlano col bot.
+
+1. **In `~/.openclaw/openclaw.json`**, sotto `channels.whatsapp.accounts`, aggiungi un secondo id (es. `"secondario"`) **copiando le stesse chiavi** di `"default"`: `enabled`, `dmPolicy: "allowlist"`, **`allowFrom` identico** (solo il tuo E.164), `selfChatMode`, `groupPolicy: "disabled"`, `configWrites`, `debounceMs`. Non aggiungere altri numeri se non vuoi che scrivano al bot.
+2. **Associazione QR** (dal PC, con gateway **spento** o seguendo la doc se richiede il gateway — in dubbio spegni prima il gateway):
    ```bash
-   npx openclaw@latest channels login --account lavoro
+   npx openclaw@latest channels login --channel whatsapp --account secondario
    ```
-3. Riavvia il gateway.
+   Scannerizza il QR con **il secondo telefono / secondo numero** (WhatsApp su quel dispositivo).
+3. **Riavvia** il gateway (`npm run openclaw:start` o il comando che usi).
+4. **Prova:** dalla chat **solo tu** (allowlist) su quel numero; messaggi da altri numeri devono essere **ignorati** o richiedere pairing se cambi policy — con **`allowlist` stretta** non devono entrare.
 
-La documentazione ufficiale OpenClaw descrive account multipli e binding; questa nota è solo **policy** per questo hub.
+Se il comando non accetta `--channel`, usa solo `channels login --account secondario` come da versione installata (`openclaw channels login --help`).
+
+La documentazione ufficiale OpenClaw descrive account multipli e binding; questa nota è **policy + passi** per questo hub.
 
 ## Separazione ruoli
 

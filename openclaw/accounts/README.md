@@ -11,11 +11,12 @@ OpenClaw supporta **un solo gateway** sul PC, ma **più account WhatsApp** colle
 
 ## Passi tipici (sintesi)
 
-1. In **`openclaw.json`**, sotto `channels.whatsapp.accounts`, aggiungi un id (es. `"org"`) oltre a `"default"`, con le stesse chiavi che usi per `default` (`enabled`, `dmPolicy`, `allowFrom`, …).
+1. In **`openclaw.json`**, sotto `channels.whatsapp.accounts`, aggiungi un id (es. `"secondario"`) oltre a `"default"`, con le **stesse** chiavi di `default` e **`allowFrom` identico** (solo il tuo numero E.164) se vuoi che **solo tu** possa scrivere al bot anche su quel numero.
 2. Associa il secondo numero con:
    ```bash
-   npx openclaw@latest channels login --account org
+   npx openclaw@latest channels login --channel whatsapp --account secondario
    ```
+   (Se la tua versione non accetta `--channel`, prova solo `--account secondario`.)
    (QR / dispositivi collegati come da doc OpenClaw.)
 3. Riavvia il gateway.
 
