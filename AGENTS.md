@@ -16,13 +16,14 @@ Sei sul **gateway OpenClaw sul PC** con **`tools.profile: coding`**, **sandbox `
 
 Se il messaggio utente contiene una di queste (maiuscole irrilevanti): **pensaci meglio**, **pensaci bene**, **rifletti meglio**, **pensa meglio**, **ci pensa meglio**, **pensaci su**, **pensa bene**, **ragionaci meglio**, **più a fondo**:
 
-1. **Prima riga** della tua risposta (solo quella, niente testo prima): `/model 14`  
-   (alias configurato per `ollama/qwen2.5-coder:14b`; equivalente: `/model ollama/qwen2.5-coder:14b`)
+1. **Prima riga** della tua risposta (solo quella, niente testo prima): **`/deep`** (alias → modello 14b). Equivalenti: **`/model deep`**, **`/model ollama/qwen2.5-coder:14b`**.
 2. **Seconda riga** vuota, poi la risposta completa al problema.
 
-Se il canale **non** interpreta `/model` dal testo dell’assistente, dopo quella riga aggiungi: *«Se il modello non è cambiato, invia tu una riga da solo: `/model 14` e ripeti la domanda.»*
+**L’utente può anche scrivere `/deep` nello stesso messaggio** (OpenClaw riconosce la direttiva inline): es. *«Qual è l’URL /deep»* passa al 14b e poi risponde sul resto.
 
-Per tornare veloce dopo: `/model 7`.
+Se il canale **non** applica la direttiva, suggerisci: messaggio da solo **`/deep`** poi ripeti la domanda.
+
+Per tornare veloce: **`/7`** o **`/model 7`** (alias 7b).
 
 ---
 

@@ -25,8 +25,8 @@ Dopo la modifica, riavvia il gateway (o attendi reload se supportato).
 | Chi | Cosa succede |
 |-----|----------------|
 | **Sistema (automatico)** | Con **fallback** in `openclaw.json`: se il modello primario **fallisce** (errore provider, modello assente, ecc.), OpenClaw prova il **successivo** nella lista (es. passa al **14b**). Non è “intelligenza”: è **failover**. |
-| **Tu (manuale, consigliato quando serve qualità)** | In chat invia un messaggio da solo: **`/model 14`** (alias) oppure **`/model ollama/qwen2.5-coder:14b`**. Per tornare veloce: **`/model 7`**. Elenco: **`/models`**. (Vedi anche [TUI](https://docs.openclaw.ai/web/tui).) |
-| **Frasi trigger + agente** | Se scrivi **«pensaci meglio»** / **«pensaci bene»** / **«rifletti meglio»** (vedi lista in **`AGENTS.md`**), l’agente è istruito a mettere **`/model 14`** come prima riga, poi la risposta. Altrimenti usa tu **`/model 14`** per compiti pesanti. |
+| **Tu (manuale)** | **Più veloce:** **`/deep`** da solo o **nello stesso messaggio** (es. `dimmi l'URL /deep`) — alias del **14b** in `openclaw.json`. Anche **`/model deep`** o nome completo `ollama/...`. Torna al 7b: **`/7`** o **`/model 7`**. Elenco: **`/models`**. |
+| **Frasi trigger + agente** | Vedi **`AGENTS.md`**: l’agente può rispondere con **`/deep`** in testa. |
 
 **Quando ha senso il 14b:** refactor ampio, bug complesso, patch su più file, ragionamento lungo. Per domande brevi o “trova questo file” il **7b** basta ed è più rapido.
 
