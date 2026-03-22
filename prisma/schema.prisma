@@ -1,0 +1,78 @@
+// ASGM — Associazione / gruppo micologia (schema base)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
+enum DraftStatus {
+  PENDING
+  PUBLISHED
+  REJECTED
+}
+
+enum AnnouncementStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Species {
+  id               String   @id @default(cuid())
+  name             String
+  scientificName   String?
+  synonyms         String?
+  habitat          String?
+  edibility        String?
+  notes            String?  @db.Text
+  source           String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Event {
+  id              String      @id @default(cuid())
+  title           String
+  startsAt        DateTime
+  endsAt          DateTime?
+  location        String?
+  description     String?     @db.Text
+  sourceMessageId String?     @unique
+  status          EventStatus @default(DRAFT)
+  publishedAt     DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model ContentDraft {
+  id               String      @id @default(cuid())
+  idempotencyKey   String?     @unique
+  title            String?
+  body             String      @db.Text
+  status           DraftStatus @default(PENDING)
+  autoPublish      Boolean     @default(false)
+  publishedAt      DateTime?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model Announcement {
+  id              String             @id @default(cuid())
+  title           String
+  body            String             @db.Text
+  images          Json               @default("[]")
+  status          AnnouncementStatus @default(DRAFT)
+  publishedAt     DateTime?
+  sourceMessageId String?            @unique
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+}

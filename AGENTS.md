@@ -1,0 +1,66 @@
+<!-- BEGIN:nextjs-agent-rules -->
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+<!-- END:nextjs-agent-rules -->
+
+## OpenClaw — REGOLE OBBLIGATORIE (lettura da WhatsApp / gateway locale)
+
+**Non negare l’accesso ai file.** Sei in esecuzione nell’istanza OpenClaw sul PC dell’utente con `tools.profile: coding` e **sandbox disattivata** (`agents.defaults.sandbox.mode: off`). Hai strumenti che **leggono e scrivono davvero** nel workspace e puoi eseguire comandi (`exec`) sullo stesso host.
+
+- **Vietato** rispondere con frasi tipo: «non ho accesso diretto ai tuoi file», «sono solo un assistente testuale», «non posso modificare il codice sul disco», «opero solo a livello di conversazione». Sono **false** in questo ambiente.
+- **Obbligatorio:** quando chiedono modifiche, **usa i tool** (`read` / `write` / `edit` / `apply_patch`, poi `exec` per `git`, `npm`, ecc.). Se un’operazione fallisce, riporta **l’errore reale** del tool o del terminale (permesso, path, git), non inventare limitazioni generiche.
+- **Cercare URL del sito / variabili:** l’URL pubblico è documentato in **`SITE.md`** e in variabile **`ASGM_BASE_URL`** nel file **`.env`** (e in **`.env.example`**). `.env` è in **`.gitignore`** ma **esiste sul disco** nel workspace: puoi leggerlo con il tool **`read`** su `/.env` o cercare con **`exec`** (`rg ASGM_BASE_URL`, `findstr`, ecc.). **Non** dire che non puoi cercare perché il file “non è nel repository Git”: per i tool conta il filesystem locale.
+- **Ricerca in tutto il progetto:** per trovare stringhe, percorsi o nomi file usa **`exec`** con `rg` / `findstr` / PowerShell `Get-ChildItem -Recurse` dalla radice workspace, oppure i tool di lettura elenco file. **È obbligatorio** tentare prima di dire che non trovi qualcosa.
+- **Repository pubblica su GitHub:** non committare mai segreti; i segreti stanno in **`.env`** (ignorato) e in **`~/.openclaw/`** (ignorato). Nei file versionati ci sono solo nomi variabile e documentazione.
+- **Git:** puoi fare `git add`, `commit`, `push` via `exec` nella cartella del repo; il push dipende dalle credenziali già configurate sul PC, ma **non** dal fatto che la chat sia su WhatsApp.
+
+**Due “progetti” sullo stesso PC**
+
+- **Repo ASGM (radice workspace):** `C:\Users\Utente\OpenClawWebsiteFunghi+` — è il `workspace` OpenClaw; qui hai pieno accesso operativo con i tool.
+- **Altra cartella richiesta dall’utente:** `gpittonWeb\` è una **sottocartella** di quella radice (presente sul disco; elencata in `.gitignore` del repo parent ma **non** invisibile ai tool). Path tipico: `C:\Users\Utente\OpenClawWebsiteFunghi+\gpittonWeb\`. Puoi leggere/scrivere lì come il resto del workspace **se la cartella esiste**. Se non esiste, dillo dopo aver verificato con `read`/`exec` (`dir` / `Test-Path`), non a priori.
+
+---
+
+## OpenClaw / assistente (locale)
+
+### Cosa può fare l’agente (riferimento canonico — usalo quando chiedono «cosa puoi fare»)
+
+**Dove opera**
+
+- **Workspace OpenClaw:** `C:\Users\Utente\OpenClawWebsiteFunghi+` (ASGM: Next.js, Prisma, annunci, ingest, ecc.). Include le sottocartelle accessibili dal filesystem, **incluso** `gpittonWeb\` se presente.
+- Puoi **leggere, creare e modificare file** con i tool; sandbox **off** sul gateway per questo agente.
+
+**Cervello (LLM)**
+
+- Solo **Ollama locale**. Ordine: `qwen2.5-coder:14b` (primario) → `7b` → `dolphin-…` → `deepseek-…` se un modello fallisce. Nessun obbligo di modelli cloud.
+
+**Strumenti** (`tools.profile: coding`)
+
+- Disponibili in linea di massima: file (`read`, `write`, `edit`, `apply_patch`), terminale (`exec`, `process`), sessioni OpenClaw (`sessions_*`, `subagents`, `session_status`), memoria progetto (`memory_search`, … dove abilitata), immagini dove previsto.
+- Di solito **non** esposti come tool diretti dell’agente: `browser`, `canvas`, `gateway`, `cron`, client di altri canali (Telegram, Discord, …) — non dire che li controlli da qui.
+- **Git:** puoi proporre `git add/commit/push` via `exec`; il **push** riesce solo se sul PC Git è **già** autenticato (SSH, Credential Manager, `gh`, ecc.).
+
+**WhatsApp**
+
+- Rispondi solo nel flusso consentito dalla config: **DM con allowlist** (solo il numero configurato), **self-chat** attivo, **gruppi disattivati**. Non scrivere che puoi scrivere in gruppi o ad altri numeri se non sono in policy.
+
+**Cosa puoi chiedere (esempi)**
+
+- Modifiche al sito, componenti React, API routes, Prisma, script, spiegazioni di errore, piccoli refactor, comandi `npm run …` / `npx prisma …` quando sensato.
+
+**Cosa non promettere**
+
+- Accesso a **cartelle fuori** da `C:\Users\Utente\OpenClawWebsiteFunghi+` (es. altro disco) senza che la config OpenClaw lo permetta — ma **non** confondere: tutto ciò che sta **sotto** la radice workspace (incluso `gpittonWeb\`) è accessibile.
+- Push Git “garantito” senza sapere se le credenziali sul PC ci sono (meglio: «provo `git push` e ti incollo l’output»).
+- Servizi cloud LLM o account esterni non configurati in OpenClaw.
+
+**Se chiedono in una frase «cosa puoi fare»**
+
+- Rispondi in **italiano**, 5–8 righe: (1) OpenClaw sul PC con accesso **reale** ai file del workspace (inclusa `gpittonWeb` se c’è); (2) **Ollama** (14b poi fallback); (3) modifiche codice e comandi (`git`, `npm`) via tool; (4) **git push** se le credenziali sul PC lo permettono.
+
+---
+
+- **Modelli**: solo **Ollama sul PC**. Catena: `14b` → `7b` → altri fallback in config.
+- **Collegamenti**: gateway **OpenClaw** locale; **WhatsApp** (solo allowlist + self-chat); progetto **ASGM** come sopra.
+- **Quando chiedono** «cosa puoi fare» / «a cosa sei collegato»: usa la sezione **Cosa può fare l’agente** sopra; non contraddirla.
