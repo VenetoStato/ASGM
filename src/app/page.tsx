@@ -27,7 +27,7 @@ export default async function Home() {
 
   return (
     <main className="flex flex-1 flex-col pb-16">
-      <section className="relative overflow-hidden border-b border-emerald-900/10 bg-gradient-to-br from-emerald-950 via-emerald-900 to-stone-900 px-4 py-12 text-white sm:py-16">
+      <section className="relative overflow-hidden border-b border-amber-900/20 bg-gradient-to-br from-amber-950 via-stone-800 to-stone-950 px-4 py-12 text-white sm:py-16">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.07]"
           style={{
@@ -36,20 +36,20 @@ export default async function Home() {
           aria-hidden
         />
         <div className="relative mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-300/90">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/90">
             Associazione / gruppo
           </p>
           <h1 className="mt-3 text-balance text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-[2.5rem]">
             Gruppo micologico ASGM
           </h1>
-          <p className="mx-auto mt-4 max-w-lg text-pretty text-base leading-relaxed text-emerald-100/90 sm:text-lg">
-            Annunci, uscite sul territorio e schede funghi. Pensato per il
+          <p className="mx-auto mt-4 max-w-lg text-pretty text-base leading-relaxed text-amber-100/90 sm:text-lg">
+            Annunci, uscite sul territorio e schede funghi. Ottimizzato per il
             telefono: scorri e usa il menu in alto.
           </p>
           <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href="/#annunci"
-              className="rounded-2xl bg-white px-6 py-3.5 text-center text-base font-semibold text-emerald-950 shadow-lg shadow-black/20 transition hover:bg-emerald-50 active:scale-[0.98] sm:min-w-[11rem]"
+              className="rounded-2xl bg-white px-6 py-3.5 text-center text-base font-semibold text-stone-900 shadow-lg shadow-black/20 transition hover:bg-amber-50 active:scale-[0.98] sm:min-w-[11rem]"
             >
               Annunci
             </Link>
@@ -61,7 +61,7 @@ export default async function Home() {
             </Link>
             <Link
               href="/admin/login"
-              className="rounded-2xl border border-white/20 bg-transparent px-6 py-3.5 text-center text-base font-medium text-emerald-100 transition hover:bg-white/10 active:scale-[0.98] sm:min-w-[11rem]"
+              className="rounded-2xl border border-white/20 bg-transparent px-6 py-3.5 text-center text-base font-medium text-amber-100 transition hover:bg-white/10 active:scale-[0.98] sm:min-w-[11rem]"
             >
               Area organizzatori
             </Link>

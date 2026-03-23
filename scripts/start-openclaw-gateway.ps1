@@ -6,6 +6,10 @@ $ErrorActionPreference = "Stop"
 $projRoot = Resolve-Path (Join-Path $PSScriptRoot "..")
 
 $env:OLLAMA_API_KEY = "ollama-local"
+# Anche a livello utente Windows (così anche se lanci `gateway` senza questo script, Ollama risulta registrato):
+if (-not [Environment]::GetEnvironmentVariable("OLLAMA_API_KEY", "User")) {
+  [Environment]::SetEnvironmentVariable("OLLAMA_API_KEY", "ollama-local", "User")
+}
 # OpenClaw registra Ollama solo se questa variabile (o models.providers.ollama.apiKey) è impostata — non è un login web.
 
 Write-Host ""
