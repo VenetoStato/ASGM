@@ -49,8 +49,8 @@ Per tornare veloce: **`/7`** o **`/model 7`** (alias 7b).
 
 **Due “progetti” sullo stesso PC**
 
-- **Repo ASGM (radice workspace):** `C:\Users\Utente\OpenClawWebsiteFunghi+` — è il `workspace` OpenClaw; qui hai pieno accesso operativo con i tool.
-- **Altra cartella richiesta dall’utente:** `gpittonWeb\` è una **sottocartella** di quella radice (presente sul disco; elencata in `.gitignore` del repo parent ma **non** invisibile ai tool). Path tipico: `C:\Users\Utente\OpenClawWebsiteFunghi+\gpittonWeb\`. Puoi leggere/scrivere lì come il resto del workspace **se la cartella esiste**. Se non esiste, dillo dopo aver verificato con `read`/`exec` (`dir` / `Test-Path`), non a priori.
+- **Repo ASGM (radice workspace):** `C:\Users\Utente\OpenClawOrchestrator` — è il `workspace` OpenClaw; qui hai pieno accesso operativo con i tool.
+- **Altra cartella richiesta dall’utente:** `gpittonWeb\` è una **sottocartella** di quella radice (presente sul disco; elencata in `.gitignore` del repo parent ma **non** invisibile ai tool). Path tipico: `C:\Users\Utente\OpenClawOrchestrator\gpittonWeb\`. Puoi leggere/scrivere lì come il resto del workspace **se la cartella esiste**. Se non esiste, dillo dopo aver verificato con `read`/`exec` (`dir` / `Test-Path`), non a priori.
 
 ---
 
@@ -60,7 +60,7 @@ Per tornare veloce: **`/7`** o **`/model 7`** (alias 7b).
 
 **Dove opera**
 
-- **Workspace OpenClaw:** `C:\Users\Utente\OpenClawWebsiteFunghi+` (ASGM: Next.js, Prisma, annunci, ingest, ecc.). Include le sottocartelle accessibili dal filesystem, **incluso** `gpittonWeb\` se presente.
+- **Workspace OpenClaw:** `C:\Users\Utente\OpenClawOrchestrator` (ASGM: Next.js, Prisma, annunci, ingest, ecc.). Include le sottocartelle accessibili dal filesystem, **incluso** `gpittonWeb\` se presente.
 - Puoi **leggere, creare e modificare file** con i tool; sandbox **off** sul gateway per questo agente.
 
 **Cervello (LLM)**
@@ -84,7 +84,7 @@ Per tornare veloce: **`/7`** o **`/model 7`** (alias 7b).
 
 **Cosa non promettere**
 
-- Accesso a **cartelle fuori** da `C:\Users\Utente\OpenClawWebsiteFunghi+` (es. altro disco) senza che la config OpenClaw lo permetta — ma **non** confondere: tutto ciò che sta **sotto** la radice workspace (incluso `gpittonWeb\`) è accessibile.
+- Accesso a **cartelle fuori** da `C:\Users\Utente\OpenClawOrchestrator` (es. altro disco) senza che la config OpenClaw lo permetta — ma **non** confondere: tutto ciò che sta **sotto** la radice workspace (incluso `gpittonWeb\`) è accessibile.
 - Push Git “garantito” senza sapere se le credenziali sul PC ci sono (meglio: «provo `git push` e ti incollo l’output»).
 - Servizi cloud LLM o account esterni non configurati in OpenClaw.
 

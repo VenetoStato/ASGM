@@ -6,17 +6,17 @@ Il progetto npm si chiama già **`asgm`**. La cartella locale può coincidere pe
 
 - **Suggerito:** `asgm` o `ASGM` (stesso nome del repo GitHub `VenetoStato/ASGM`).
 
-Il nome attuale `OpenClawWebsiteFunghi+` è storico; rinominare è solo organizzativo.
+Cartella progetto consigliata: **`C:\Users\Utente\OpenClawOrchestrator`** (nome breve: orchestrazione hub OpenClaw + repo ASGM).
 
 ## Come rinominare la cartella (Windows)
 
-1. Chiudi **Cursor**, **terminale** e **gateway OpenClaw** (finestra `openclaw gateway`).
-2. Rinomina la cartella in Esplora file (es. `C:\Users\Utente\asgm`).
-3. Aggiorna **`C:\Users\Utente\.openclaw\openclaw.json`**:
-   - `agents.defaults.workspace`
-   - `agents.defaults.repoRoot`  
-   con il nuovo path assoluto.
-4. Riapri il progetto in Cursor dalla nuova cartella e rilancia `npm run openclaw:start`.
+1. Chiudi **Cursor** su questa cartella, **terminale** e **gateway OpenClaw** (ho già fermato i processi `node` openclaw/next se erano attivi).
+2. Rinomina **`OpenClawWebsiteFunghi+`** in **`OpenClawOrchestrator`** (Esplora file o PowerShell):
+   ```powershell
+   Rename-Item -LiteralPath "C:\Users\Utente\OpenClawWebsiteFunghi+" -NewName "OpenClawOrchestrator"
+   ```
+3. **`openclaw.json`** è già impostato su `C:\Users\Utente\OpenClawOrchestrator` (workspace + repoRoot). Se rinomini diversamente, aggiorna quei due campi.
+4. Riapri in Cursor **`C:\Users\Utente\OpenClawOrchestrator`** e rilancia `npm run openclaw:start`.
 
 Il **remote Git** (`origin`) non cambia rinominando la cartella.
 
