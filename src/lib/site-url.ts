@@ -1,7 +1,10 @@
+/** Dominio ufficiale (fallback SEO se mancano le variabili d’ambiente). */
+export const OFFICIAL_SITE_ORIGIN = "https://gmcsandonatese.com";
+
 /**
  * URL canonico del sito (SEO, Open Graph, sitemap).
- * In produzione impostare `NEXT_PUBLIC_SITE_URL` (es. https://www.tuodominio.it).
- * Su Vercel, se assente, si usa `VERCEL_URL`.
+ * Priorità: `NEXT_PUBLIC_SITE_URL`, poi `VERCEL_URL` (preview/deploy),
+ * in sviluppo `localhost`, in produzione senza Vercel il dominio ufficiale.
  */
 export function getMetadataBase(): URL {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim();
@@ -16,7 +19,10 @@ export function getMetadataBase(): URL {
   if (vercel) {
     return new URL(`https://${vercel.replace(/\/$/, "")}`);
   }
-  return new URL("http://localhost:3000");
+  if (process.env.NODE_ENV === "development") {
+    return new URL("http://localhost:3000");
+  }
+  return new URL(OFFICIAL_SITE_ORIGIN);
 }
 
 export function absoluteUrl(path: string): string {

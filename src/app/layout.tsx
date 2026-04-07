@@ -11,7 +11,7 @@ import {
   organizationJsonLd,
   websiteJsonLd,
 } from "@/lib/seo-config";
-import { getSiteLogoUrl } from "@/lib/site-logo";
+import { getSiteLogoUrl, SITE_LOGO_PUBLIC_PATH } from "@/lib/site-logo";
 import { getMetadataBase } from "@/lib/site-url";
 import "./globals.css";
 
@@ -29,6 +29,7 @@ const titillium = Titillium_Web({
 });
 
 const metadataBase = getMetadataBase();
+const defaultOgImage = new URL(SITE_LOGO_PUBLIC_PATH, `${metadataBase.origin}/`).href;
 
 export const metadata: Metadata = {
   metadataBase,
@@ -47,11 +48,20 @@ export const metadata: Metadata = {
     title: `${SITE_NAME} | San Donà di Piave`,
     description: DEFAULT_DESCRIPTION,
     url: metadataBase.href,
+    images: [
+      {
+        url: defaultOgImage,
+        width: 512,
+        height: 512,
+        alt: `${SITE_NAME} — logo`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE_NAME} | San Donà di Piave`,
     description: DEFAULT_DESCRIPTION,
+    images: [defaultOgImage],
   },
   robots: {
     index: true,

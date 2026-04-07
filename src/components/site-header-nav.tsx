@@ -66,10 +66,10 @@ export function SiteHeaderNav({ logoUrl }: Props) {
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={logoUrl}
-              alt=""
-              width={40}
-              height={40}
-              className="h-10 w-10 shrink-0 rounded-full object-cover ring-2 ring-white/20 sm:h-11 sm:w-11"
+              alt="Gruppo Micologico Culturale Sandonatese — logo"
+              width={44}
+              height={44}
+              className="h-10 w-10 shrink-0 rounded-lg bg-white object-contain p-0.5 ring-2 ring-white/25 sm:h-11 sm:w-11"
             />
           ) : (
             <div
