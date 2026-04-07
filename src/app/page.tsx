@@ -1,13 +1,25 @@
 import Link from "next/link";
 import { FacebookSection } from "@/components/facebook-section";
 import { FeaturedSpeciesSection } from "@/components/featured-species-section";
-import { fetchFacebookGraphPosts } from "@/lib/facebook-posts";
 import {
+  fetchFacebookGraphPosts,
+  fetchFacebookPageMeta,
+} from "@/lib/facebook-posts";
+import {
+  getHomeSpotlight,
   getSiteCopy,
+  getWeeklyFeaturedSpecies,
   listPublishedAnnouncements,
   listSpecies,
   listUpcomingEvents,
 } from "@/lib/db-public";
+import {
+  ContentCard,
+  EmptyState,
+  Prose,
+  Section,
+  SectionHeader,
+} from "@/components/ui/section";
 
 function parseImages(raw: unknown): string[] {
   if (!raw || !Array.isArray(raw)) return [];
@@ -24,102 +36,152 @@ function formatEventWhen(d: Date) {
   }).format(d);
 }
 
+const ctaPrimary =
+  "inline-flex min-w-[10rem] items-center justify-center rounded-2xl bg-white px-5 py-3 text-center text-sm font-semibold text-stone-900 shadow-lg shadow-black/15 transition hover:bg-amber-50 sm:text-base";
+const ctaGhost =
+  "inline-flex min-w-[10rem] items-center justify-center rounded-2xl border border-white/30 bg-white/10 px-5 py-3 text-center text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 sm:text-base";
+
 export default async function Home() {
-  const [copy, announcements, upcoming, species, fbPosts] = await Promise.all([
+  const [
+    copy,
+    announcements,
+    upcoming,
+    species,
+    fbPosts,
+    pageMeta,
+    spotlight,
+    weeklySpecies,
+  ] = await Promise.all([
     getSiteCopy(),
     listPublishedAnnouncements(5),
     listUpcomingEvents(6),
     listSpecies(),
     fetchFacebookGraphPosts(),
+    fetchFacebookPageMeta(),
+    getHomeSpotlight(),
+    getWeeklyFeaturedSpecies(),
   ]);
 
   const featuredSpecies =
     species && species.length > 0 ? species : null;
+  const weeklyId = weeklySpecies?.id ?? null;
 
   return (
-    <main className="flex flex-1 flex-col pb-16">
-      <section className="relative overflow-hidden border-b border-amber-900/20 bg-gradient-to-br from-amber-950 via-stone-800 to-stone-950 px-4 py-12 text-white sm:py-16">
+    <main className="flex flex-1 flex-col">
+      <section className="relative overflow-hidden border-b border-amber-900/25 bg-gradient-to-br from-[#0c1f14] via-emerald-950 to-stone-950 px-4 py-14 text-white sm:py-20">
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M40 0L60 20v20L40 60 20 40V20z'/%3E%3C/svg%3E")`,
           }}
           aria-hidden
         />
-        <div className="relative mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/90">
-            Micologia · territorio
+        <div className="relative mx-auto max-w-3xl text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-200/85">
+            Gruppo micologico · Bassa · Veneto
           </p>
-          <h1 className="mt-3 text-balance text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-[2.35rem]">
+          <h1 className="mt-4 text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[2.6rem]">
             {copy.heroTitle}
           </h1>
-          <p className="mt-2 text-lg font-medium text-amber-100/95 sm:text-xl">
+          <p className="mt-3 text-lg font-medium text-amber-100/95 sm:text-xl">
             {copy.heroSubtitle}
           </p>
-          <p className="mx-auto mt-4 max-w-lg text-pretty text-base leading-relaxed text-amber-100/90 sm:text-lg">
+          <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-stone-200/95 sm:text-lg">
             {copy.heroLead}
           </p>
-          <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap">
-            <Link
-              href="/#chi-siamo"
-              className="rounded-2xl border border-white/25 bg-white/10 px-6 py-3.5 text-center text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 active:scale-[0.98] sm:min-w-[11rem]"
-            >
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <Link href="/#in-evidenza" className={ctaPrimary}>
+              In evidenza
+            </Link>
+            <Link href="/#chi-siamo" className={ctaGhost}>
               Chi siamo
             </Link>
-            <Link
-              href="/#annunci"
-              className="rounded-2xl bg-white px-6 py-3.5 text-center text-base font-semibold text-stone-900 shadow-lg shadow-black/20 transition hover:bg-amber-50 active:scale-[0.98] sm:min-w-[11rem]"
-            >
+            <Link href="/#annunci" className={ctaGhost}>
               Annunci
             </Link>
-            <Link
-              href="/#date"
-              className="rounded-2xl border-2 border-white/35 bg-white/10 px-6 py-3.5 text-center text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 active:scale-[0.98] sm:min-w-[11rem]"
-            >
-              Prossime date
-            </Link>
-            <Link
-              href="/#schede"
-              className="rounded-2xl border border-white/25 bg-white/10 px-6 py-3.5 text-center text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 active:scale-[0.98] sm:min-w-[11rem]"
-            >
-              Schede funghi
-            </Link>
-            <Link
-              href="/admin/login"
-              className="rounded-2xl border border-white/20 bg-transparent px-6 py-3.5 text-center text-base font-medium text-amber-100 transition hover:bg-white/10 active:scale-[0.98] sm:min-w-[11rem]"
-            >
-              Area organizzatori
+            <Link href="/#facebook" className={ctaGhost}>
+              Facebook
             </Link>
           </div>
         </div>
       </section>
 
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-14 px-4 pt-12">
-        <section id="chi-siamo" className="scroll-mt-28">
-          <h2 className="border-b border-stone-200/90 pb-4 text-2xl font-bold tracking-tight text-emerald-950">
-            Chi siamo
-          </h2>
-          <p className="mt-6 whitespace-pre-wrap text-pretty text-[15px] leading-relaxed text-stone-700 sm:text-base">
-            {copy.chiSiamo}
-          </p>
-        </section>
+      <Section id="in-evidenza" band="paper" narrow>
+        <SectionHeader
+          compact
+          title="In evidenza"
+          description="La prossima attività in programma o l’ultimo annuncio pubblicato."
+        />
+        <div className="mt-6">
+          {!spotlight && (
+            <EmptyState title="Nessun contenuto in evidenza al momento.">
+              Torna a trovarci presto o consulta il calendario e gli annunci
+              qui sotto.
+            </EmptyState>
+          )}
+          {spotlight?.kind === "event" && (
+            <ContentCard>
+              <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                Prossima attività
+              </p>
+              <p className="mt-2 text-lg font-semibold text-emerald-950">
+                {spotlight.item.title}
+              </p>
+              <p className="mt-1 text-sm text-stone-600">
+                {formatEventWhen(spotlight.item.startsAt)}
+                {spotlight.item.location
+                  ? ` · ${spotlight.item.location}`
+                  : ""}
+              </p>
+              <Link
+                href="/eventi"
+                className="mt-4 inline-block text-sm font-semibold text-emerald-800 hover:underline"
+              >
+                Vedi tutti gli eventi →
+              </Link>
+            </ContentCard>
+          )}
+          {spotlight?.kind === "announcement" && (
+            <ContentCard>
+              <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                Ultimo annuncio
+              </p>
+              <p className="mt-2 text-lg font-semibold text-emerald-950">
+                {spotlight.item.title}
+              </p>
+              <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-stone-700">
+                {spotlight.item.body}
+              </p>
+              <Link
+                href="/annunci"
+                className="mt-4 inline-block text-sm font-semibold text-emerald-800 hover:underline"
+              >
+                Tutti gli annunci →
+              </Link>
+            </ContentCard>
+          )}
+        </div>
+      </Section>
 
-        <section
-          id="pubblicazioni"
-          className="grid scroll-mt-28 gap-4 sm:grid-cols-2"
-        >
-          <div className="rounded-2xl border border-stone-200/90 bg-white p-5 shadow-sm ring-1 ring-stone-900/[0.03] sm:p-6">
-            <h2 className="text-lg font-bold text-emerald-950">
+      <Section id="chi-siamo" band="default">
+        <SectionHeader title="Chi siamo" />
+        <Prose className="mt-8">{copy.chiSiamo}</Prose>
+      </Section>
+
+      <Section id="pubblicazioni" band="muted">
+        <div className="grid gap-5 md:grid-cols-2">
+          <ContentCard>
+            <h3 className="text-lg font-semibold text-emerald-950">
               Pubblicazioni e materiali
-            </h2>
+            </h3>
             <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-stone-600 sm:text-[15px]">
               {copy.pubblicazioni}
             </p>
-          </div>
-          <div className="rounded-2xl border border-stone-200/90 bg-white p-5 shadow-sm ring-1 ring-stone-900/[0.03] sm:p-6">
-            <h2 className="text-lg font-bold text-emerald-950">
+          </ContentCard>
+          <ContentCard>
+            <h3 className="text-lg font-semibold text-emerald-950">
               Calendario e attività
-            </h2>
+            </h3>
             <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-stone-600 sm:text-[15px]">
               {copy.calendarioAttivita}
             </p>
@@ -127,191 +189,167 @@ export default async function Home() {
               href="/eventi"
               className="mt-4 inline-block text-sm font-semibold text-emerald-800 hover:underline"
             >
-              Vai al calendario →
+              Vai al calendario completo →
             </Link>
-          </div>
-        </section>
+          </ContentCard>
+        </div>
+      </Section>
 
-        <section id="sostegno" className="scroll-mt-28 rounded-2xl border border-amber-200/90 bg-amber-50/80 p-5 sm:p-6">
-          <h2 className="text-lg font-bold text-emerald-950">Sostegno</h2>
-          <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-stone-800 sm:text-[15px]">
-            {copy.sostegno}
-          </p>
-        </section>
+      <Section id="sostegno" band="accent" narrow>
+        <ContentCard hover={false} className="border-amber-200/90 bg-white/90">
+          <SectionHeader compact title="Sostegno al gruppo" />
+          <Prose className="mt-4 text-stone-800">{copy.sostegno}</Prose>
+        </ContentCard>
+      </Section>
 
-        <FeaturedSpeciesSection fromDb={featuredSpecies} />
+      <Section id="schede" band="default">
+        <FeaturedSpeciesSection
+          fromDb={featuredSpecies}
+          weeklyHighlightId={weeklyId}
+        />
+      </Section>
 
-        <FacebookSection graphPosts={fbPosts} />
+      <Section id="facebook" band="muted">
+        <FacebookSection graphPosts={fbPosts} pageMeta={pageMeta} />
+      </Section>
 
-        <section id="annunci" className="scroll-mt-28">
-          <div className="flex flex-wrap items-end justify-between gap-3 border-b border-stone-200/90 pb-4">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight text-emerald-950">
-                Annunci
-              </h2>
-              <p className="mt-1 text-sm text-stone-500">
-                Novità dal gruppo
-              </p>
-            </div>
+      <Section id="annunci" band="paper">
+        <SectionHeader
+          title="Annunci"
+          description="Novità e comunicazioni del gruppo."
+          action={
             <Link
               href="/annunci"
-              className="rounded-full bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-900 ring-1 ring-emerald-800/15 transition hover:bg-emerald-100"
+              className="rounded-full bg-emerald-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-950"
             >
-              Vedi tutti
+              Archivio
             </Link>
-          </div>
+          }
+        />
+        <div className="mt-8">
           {!announcements && (
-            <p className="mt-4 rounded-xl border border-amber-200/80 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-              Gli annunci non sono disponibili al momento. Riprova più tardi.
-            </p>
+            <EmptyState title="Annunci temporaneamente non disponibili." />
           )}
           {announcements && announcements.length === 0 && (
-            <p className="mt-8 rounded-xl border border-dashed border-stone-300 bg-stone-100/50 px-4 py-8 text-center text-stone-600">
-              Nessun annuncio ancora. Gli organizzatori possono aggiungerne dall&apos;{" "}
-              <Link
-                href="/admin/login"
-                className="font-semibold text-emerald-800 underline decoration-emerald-800/30"
-              >
-                area riservata
-              </Link>
-              .
-            </p>
+            <EmptyState
+              title="Nessun annuncio pubblicato."
+              action={
+                <Link
+                  href="/admin/login"
+                  className="text-sm font-semibold text-emerald-800 underline"
+                >
+                  Area organizzatori
+                </Link>
+              }
+            />
           )}
           {announcements && announcements.length > 0 && (
-            <ul className="mt-8 flex flex-col gap-8">
+            <ul className="flex flex-col gap-6">
               {announcements.map((a) => {
                 const imgs = parseImages(a.images).slice(0, 3);
                 return (
-                  <li
-                    key={a.id}
-                    className="overflow-hidden rounded-2xl border border-stone-200/90 bg-white shadow-[0_2px_24px_-4px_rgba(0,0,0,0.08)] ring-1 ring-stone-900/[0.04] transition hover:shadow-[0_8px_32px_-6px_rgba(0,0,0,0.1)]"
-                  >
-                    {imgs[0] && (
-                      <div className="aspect-[21/9] w-full overflow-hidden bg-stone-200/90 sm:aspect-[2.4/1]">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={imgs[0]}
-                          alt=""
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                    )}
-                    <div className="p-5 sm:p-6">
-                      <h3 className="text-lg font-bold text-emerald-950 sm:text-xl">
-                        {a.title}
-                      </h3>
-                      <p className="mt-3 line-clamp-4 whitespace-pre-wrap text-[15px] leading-relaxed text-stone-700 sm:line-clamp-6">
-                        {a.body}
-                      </p>
-                      {imgs.length > 1 && (
-                        <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
-                          {imgs.slice(1).map((src) => (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              key={src}
-                              src={src}
-                              alt=""
-                              className="h-20 w-28 shrink-0 rounded-lg object-cover ring-1 ring-stone-200"
-                              loading="lazy"
-                            />
-                          ))}
+                  <li key={a.id}>
+                    <ContentCard className="overflow-hidden p-0">
+                      {imgs[0] && (
+                        <div className="aspect-[21/9] w-full overflow-hidden bg-stone-200/90 sm:aspect-[2.4/1]">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={imgs[0]}
+                            alt=""
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
                         </div>
                       )}
-                    </div>
+                      <div className="p-5 sm:p-6">
+                        <h3 className="text-lg font-semibold text-emerald-950 sm:text-xl">
+                          {a.title}
+                        </h3>
+                        <p className="mt-3 line-clamp-4 whitespace-pre-wrap text-[15px] leading-relaxed text-stone-700 sm:line-clamp-6">
+                          {a.body}
+                        </p>
+                      </div>
+                    </ContentCard>
                   </li>
                 );
               })}
             </ul>
           )}
-        </section>
+        </div>
+      </Section>
 
-        <section id="date" className="scroll-mt-28">
-          <div className="flex flex-wrap items-end justify-between gap-3 border-b border-stone-200/90 pb-4">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight text-emerald-950">
-                Prossime date
-              </h2>
-              <p className="mt-1 text-sm text-stone-500">
-                Uscite e attività in programma
-              </p>
-            </div>
+      <Section id="date" band="default">
+        <SectionHeader
+          title="Prossime date"
+          description="Uscite e attività in programma."
+          action={
             <Link
               href="/eventi"
-              className="rounded-full bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-900 ring-1 ring-emerald-800/15 transition hover:bg-emerald-100"
+              className="rounded-full bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-950 ring-1 ring-emerald-900/15 hover:bg-emerald-100"
             >
               Calendario
             </Link>
-          </div>
+          }
+        />
+        <div className="mt-8">
           {!upcoming && (
-            <p className="mt-4 text-sm text-stone-500">
-              Le date non sono disponibili al momento. Controlla la sezione
-              Eventi più tardi.
-            </p>
+            <EmptyState title="Calendario non disponibile al momento." />
           )}
           {upcoming && upcoming.length === 0 && (
-            <p className="mt-8 rounded-xl border border-dashed border-stone-300 bg-stone-100/50 px-4 py-8 text-center text-stone-600">
-              Nessuna data futura. Aggiungi attività da{" "}
-              <Link
-                href="/admin/login"
-                className="font-semibold text-emerald-800 underline decoration-emerald-800/30"
-              >
-                organizzatori
-              </Link>
-              .
-            </p>
+            <EmptyState title="Nessuna data futura in elenco." />
           )}
           {upcoming && upcoming.length > 0 && (
-            <ul className="mt-8 flex flex-col gap-3">
+            <ul className="flex flex-col gap-3">
               {upcoming.map((ev) => (
-                <li
-                  key={ev.id}
-                  className="flex flex-col gap-1 rounded-2xl border border-stone-200/90 bg-white p-4 shadow-sm ring-1 ring-stone-900/[0.03] transition hover:border-emerald-200/80 sm:flex-row sm:items-start sm:justify-between sm:gap-4 sm:p-5"
-                >
-                  <div>
+                <li key={ev.id}>
+                  <ContentCard>
                     <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
                       {formatEventWhen(ev.startsAt)}
                     </p>
-                    <p className="mt-1.5 text-base font-bold text-emerald-950 sm:text-lg">
+                    <p className="mt-1.5 text-base font-semibold text-emerald-950 sm:text-lg">
                       {ev.title}
                     </p>
                     {ev.location && (
-                      <p className="mt-1 text-sm text-stone-600">{ev.location}</p>
+                      <p className="mt-1 text-sm text-stone-600">
+                        {ev.location}
+                      </p>
                     )}
-                  </div>
+                  </ContentCard>
                 </li>
               ))}
             </ul>
           )}
-        </section>
+        </div>
+      </Section>
 
-        <section className="grid gap-4 sm:grid-cols-2">
-          <Link
-            href="/funghi"
-            className="group rounded-2xl border border-stone-200/90 bg-white p-6 shadow-sm ring-1 ring-stone-900/[0.03] transition hover:border-emerald-200/80 hover:shadow-md"
-          >
-            <h2 className="font-bold text-emerald-950">Funghi</h2>
-            <p className="mt-2 text-sm leading-relaxed text-stone-600">
-              Schede specie e note sul territorio.
-            </p>
-            <span className="mt-4 inline-block text-sm font-semibold text-emerald-800 group-hover:underline">
-              Apri →
-            </span>
+      <Section id="altre-sezioni" band="muted" className="pb-20">
+        <div className="grid gap-5 sm:grid-cols-2">
+          <Link href="/funghi" className="group block">
+            <ContentCard className="h-full">
+              <h3 className="text-lg font-semibold text-emerald-950">
+                Tutte le schede funghi
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-stone-600">
+                Elenco completo delle specie pubblicate sul sito.
+              </p>
+              <span className="mt-4 inline-block text-sm font-semibold text-emerald-800 group-hover:underline">
+                Apri →
+              </span>
+            </ContentCard>
           </Link>
-          <Link
-            href="/news"
-            className="group rounded-2xl border border-stone-200/90 bg-white p-6 shadow-sm ring-1 ring-stone-900/[0.03] transition hover:border-emerald-200/80 hover:shadow-md"
-          >
-            <h2 className="font-bold text-emerald-950">News</h2>
-            <p className="mt-2 text-sm leading-relaxed text-stone-600">
-              Aggiornamenti dal gruppo.
-            </p>
-            <span className="mt-4 inline-block text-sm font-semibold text-emerald-800 group-hover:underline">
-              Apri →
-            </span>
+          <Link href="/news" className="group block">
+            <ContentCard className="h-full">
+              <h3 className="text-lg font-semibold text-emerald-950">News</h3>
+              <p className="mt-2 text-sm leading-relaxed text-stone-600">
+                Articoli e brevi dal gruppo.
+              </p>
+              <span className="mt-4 inline-block text-sm font-semibold text-emerald-800 group-hover:underline">
+                Apri →
+              </span>
+            </ContentCard>
           </Link>
-        </section>
-      </div>
+        </div>
+      </Section>
     </main>
   );
 }

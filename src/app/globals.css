@@ -1,9 +1,14 @@
 @import "tailwindcss";
 
-/* Sito in chiaro: coerente con layout (no flip automatico dark che sporca i colori). */
+/* Palette istituzionale (bosco / carta / oro tenue) — ispirazione layout associativi micologici. */
 :root {
-  --background: #fafaf9;
+  --background: #f5f2eb;
   --foreground: #1c1917;
+  --heading: #052e16;
+  --surface-paper: #f5f2eb;
+  --surface-muted: rgb(245 245 244 / 0.92);
+  --surface-accent: rgb(254 243 199 / 0.45);
+  --shadow-card: 0 2px 24px -4px rgb(0 0 0 / 0.08);
 }
 
 @theme inline {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { getSiteLogoUrl } from "@/lib/site-logo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -27,18 +28,19 @@ export const viewport = {
   themeColor: "#022c22",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const logoUrl = await getSiteLogoUrl();
   return (
     <html
       lang="it"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-stone-50 text-stone-900">
-        <SiteHeader />
+      <body className="min-h-full flex flex-col bg-[var(--surface-paper)] text-stone-900">
+        <SiteHeader logoUrl={logoUrl} />
         {children}
         <SiteFooter />
       </body>

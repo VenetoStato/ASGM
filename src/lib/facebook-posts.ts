@@ -6,6 +6,34 @@ export type FacebookPost = {
   full_picture?: string | null;
 };
 
+export type FacebookPageMeta = {
+  name: string | null;
+  pictureUrl: string | null;
+};
+
+export async function fetchFacebookPageMeta(): Promise<FacebookPageMeta | null> {
+  const token = process.env.FACEBOOK_PAGE_ACCESS_TOKEN?.trim();
+  const pageSlug =
+    process.env.FACEBOOK_PAGE_SLUG?.trim() || "micologia.sandonatese";
+  if (!token) return null;
+  try {
+    const fields = "name,picture.type(large)";
+    const url = `https://graph.facebook.com/v21.0/${encodeURIComponent(pageSlug)}?fields=${encodeURIComponent(fields)}&access_token=${encodeURIComponent(token)}`;
+    const res = await fetch(url, { next: { revalidate: 3600 } });
+    if (!res.ok) return null;
+    const j: {
+      name?: string;
+      picture?: { data?: { url?: string } };
+    } = await res.json();
+    return {
+      name: j.name ?? null,
+      pictureUrl: j.picture?.data?.url ?? null,
+    };
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Ultimi post della pagina via Meta Graph API (opzionale).
  * Richiede `FACEBOOK_PAGE_ACCESS_TOKEN` (token di pagina) e permessi adeguati su Meta for Developers.

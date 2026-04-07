@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/process-pending",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/species-weekly",
+      "schedule": "30 7 * * 1"
     }
   ]
 }

@@ -10,9 +10,14 @@ type SpeciesCard = {
 
 type Props = {
   fromDb: SpeciesCard[] | null;
+  /** Ultima specie importata dal cron (badge “in evidenza”). */
+  weeklyHighlightId?: string | null;
 };
 
-export function FeaturedSpeciesSection({ fromDb }: Props) {
+export function FeaturedSpeciesSection({
+  fromDb,
+  weeklyHighlightId,
+}: Props) {
   const useDb = fromDb && fromDb.length > 0;
   const items = useDb ? fromDb.slice(0, 4) : null;
 
@@ -40,8 +45,13 @@ export function FeaturedSpeciesSection({ fromDb }: Props) {
               <li key={s.id}>
                 <Link
                   href={`/funghi/${s.id}`}
-                  className="block h-full rounded-2xl border border-stone-200/90 bg-white p-5 shadow-sm ring-1 ring-stone-900/[0.03] transition hover:border-emerald-200/80 hover:shadow-md"
+                  className="relative block h-full rounded-2xl border border-stone-200/90 bg-white p-5 shadow-sm ring-1 ring-stone-900/[0.03] transition hover:border-emerald-200/80 hover:shadow-md"
                 >
+                  {weeklyHighlightId === s.id && (
+                    <span className="absolute right-3 top-3 rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-950 ring-1 ring-amber-300/80">
+                      In evidenza
+                    </span>
+                  )}
                   <span className="font-bold text-emerald-950">{s.name}</span>
                   {s.scientificName && (
                     <span className="mt-1 block text-sm italic text-stone-500">

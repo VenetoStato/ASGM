@@ -27,16 +27,24 @@ enum AnnouncementStatus {
 }
 
 model Species {
-  id               String   @id @default(cuid())
-  name             String
-  scientificName   String?
-  synonyms         String?
-  habitat          String?
-  edibility        String?
-  notes            String?  @db.Text
-  source           String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id                 String    @id @default(cuid())
+  name               String
+  scientificName     String?
+  synonyms           String?
+  habitat            String?
+  edibility          String?
+  notes              String?   @db.Text
+  source             String?
+  wikidataId         String?   @unique
+  wikipediaTitle     String?
+  sourceName         String?
+  sourceUrl          String?
+  lastSyncedAt       DateTime?
+  imageUrl           String?
+  imageAttribution   String?   @db.Text
+  autoImported       Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }
 
 model Event {
