@@ -1,9 +1,39 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/json-ld";
 import { ContentCard, Section, SectionHeader } from "@/components/ui/section";
+import {
+  pageMetadata,
+  speciesMetaDescription,
+  speciesWebPageJsonLd,
+} from "@/lib/seo-config";
+import { absoluteUrl } from "@/lib/site-url";
 import { getSpeciesById } from "@/lib/db-public";
 
 type Props = { params: Promise<{ id: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const result = await getSpeciesById(id);
+  if (!result.ok) {
+    return {
+      title: "Scheda non disponibile",
+      robots: { index: false, follow: false },
+    };
+  }
+  if (!result.species) {
+    notFound();
+  }
+  const s = result.species;
+  const description = speciesMetaDescription(s);
+  return pageMetadata({
+    title: s.name,
+    description,
+    path: `/funghi/${s.id}`,
+    ogImage: s.imageUrl,
+  });
+}
 
 export default async function SpeciesDetailPage({ params }: Props) {
   const { id } = await params;
@@ -26,8 +56,18 @@ export default async function SpeciesDetailPage({ params }: Props) {
   const s = result.species;
   if (!s) notFound();
 
+  const pageUrl = absoluteUrl(`/funghi/${s.id}`);
+  const pageDescription = speciesMetaDescription(s);
+  const webPageLd = speciesWebPageJsonLd({
+    url: pageUrl,
+    name: s.name,
+    description: pageDescription,
+    image: s.imageUrl,
+  });
+
   return (
     <main className="flex flex-1 flex-col">
+      <JsonLd data={webPageLd} />
       <Section band="paper" narrow className="pt-10 sm:pt-14">
         <Link
           href="/funghi"
@@ -42,7 +82,7 @@ export default async function SpeciesDetailPage({ params }: Props) {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={s.imageUrl}
-                  alt=""
+                  alt={`${s.name}${s.scientificName ? ` (${s.scientificName})` : ""} — foto della specie`}
                   className="h-full w-full object-cover"
                 />
               </div>

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ContentCard,
@@ -5,7 +6,15 @@ import {
   Section,
   SectionHeader,
 } from "@/components/ui/section";
+import { pageMetadata } from "@/lib/seo-config";
 import { listPublishedAnnouncements } from "@/lib/db-public";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Annunci",
+  description:
+    "Annunci e comunicazioni del Gruppo Micologico Culturale Sandonatese: novità, avvisi e aggiornamenti per i soci e il pubblico.",
+  path: "/annunci",
+});
 
 function parseImages(raw: unknown): string[] {
   if (!raw || !Array.isArray(raw)) return [];
@@ -66,7 +75,7 @@ export default async function AnnunciPage() {
                             <img
                               key={src}
                               src={src}
-                              alt=""
+                              alt={`Immagine allegata all'annuncio: ${a.title}`}
                               className="max-h-72 w-full rounded-xl object-cover shadow-sm"
                               loading="lazy"
                             />

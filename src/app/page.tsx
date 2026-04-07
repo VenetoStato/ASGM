@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { FacebookSection } from "@/components/facebook-section";
 import { FeaturedSpeciesSection } from "@/components/featured-species-section";
@@ -35,6 +36,11 @@ function formatEventWhen(d: Date) {
     minute: "2-digit",
   }).format(d);
 }
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: { url: "/" },
+};
 
 const ctaPrimary =
   "inline-flex w-full items-center justify-center rounded-2xl bg-white px-4 py-3 text-center text-sm font-semibold text-stone-900 shadow-lg shadow-black/15 transition hover:bg-amber-50 sm:w-auto sm:min-w-[10rem] sm:px-5 sm:text-base";
@@ -255,7 +261,7 @@ export default async function Home() {
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={imgs[0]}
-                            alt=""
+                            alt={`Anteprima annuncio: ${a.title}`}
                             className="h-full w-full object-cover"
                             loading="lazy"
                           />

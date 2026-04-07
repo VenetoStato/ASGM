@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { loginFormAction } from "@/app/organizzatori/actions";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Accesso organizzatori",
   robots: { index: false, follow: false },
+  openGraph: { title: "Accesso organizzatori" },
 };
 
 type Props = {

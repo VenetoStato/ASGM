@@ -19,6 +19,7 @@ Impostale per **Production** (e **Preview** se vuoi DB di test).
 | `FACEBOOK_PAGE_ACCESS_TOKEN` | No | Token **di pagina** Meta: post in home + foto profilo header. |
 | `FACEBOOK_PAGE_SLUG` | No | Default: `micologia.sandonatese`. |
 | `SITE_LOGO_URL` | No | Se vuoi un logo fisso al posto della foto Pagina. |
+| `NEXT_PUBLIC_SITE_URL` | **Consigliato** | URL pubblico canonico del sito (es. `https://www.tuodominio.it`), senza slash finale. Usato per Open Graph, canonical, sitemap e JSON-LD. Su Vercel, se omesso, si usa `VERCEL_URL` (ok per preview; in produzione con dominio proprio imposta questa variabile). |
 
 Opzionale: `ASGM_BASE_URL` per script locali (non richiesta dal runtime Next su Vercel).
 

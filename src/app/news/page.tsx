@@ -1,10 +1,19 @@
+import type { Metadata } from "next";
 import {
   ContentCard,
   EmptyState,
   Section,
   SectionHeader,
 } from "@/components/ui/section";
+import { pageMetadata } from "@/lib/seo-config";
 import { listPublishedNews } from "@/lib/db-public";
+
+export const metadata: Metadata = pageMetadata({
+  title: "News",
+  description:
+    "Articoli e brevi dal Gruppo Micologico Culturale Sandonatese: notizie, approfondimenti e materiali pubblicati sul sito.",
+  path: "/news",
+});
 
 function formatDate(d: Date | null) {
   if (!d) return "";

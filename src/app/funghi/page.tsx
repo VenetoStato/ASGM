@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo-config";
 import { EmptyState, Section, SectionHeader } from "@/components/ui/section";
 import { listSpecies } from "@/lib/db-public";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Schede funghi",
+  description:
+    "Elenco delle schede divulgative sulle specie di funghi pubblicate dal Gruppo Micologico Culturale Sandonatese (San Donà di Piave).",
+  path: "/funghi",
+});
 
 export default async function FunghiPage() {
   const species = await listSpecies();
@@ -46,7 +55,7 @@ export default async function FunghiPage() {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={s.imageUrl}
-                          alt=""
+                          alt={`${s.name}${s.scientificName ? ` (${s.scientificName})` : ""} — immagine scheda fungo`}
                           className="h-full w-full object-cover"
                           loading="lazy"
                         />

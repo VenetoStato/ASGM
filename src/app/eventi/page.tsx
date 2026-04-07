@@ -1,10 +1,19 @@
+import type { Metadata } from "next";
 import {
   ContentCard,
   EmptyState,
   Section,
   SectionHeader,
 } from "@/components/ui/section";
+import { pageMetadata } from "@/lib/seo-config";
 import { listPublishedEvents } from "@/lib/db-public";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Calendario eventi",
+  description:
+    "Calendario di uscite, incontri e attività del Gruppo Micologico Culturale Sandonatese a San Donà di Piave e dintorni.",
+  path: "/eventi",
+});
 
 function formatDate(d: Date) {
   return new Intl.DateTimeFormat("it-IT", {

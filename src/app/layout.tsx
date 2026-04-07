@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
 import { Inter, Titillium_Web } from "next/font/google";
+import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import {
+  DEFAULT_DESCRIPTION,
+  SEO_KEYWORDS,
+  SITE_NAME,
+  SITE_NAME_SHORT,
+  organizationJsonLd,
+  websiteJsonLd,
+} from "@/lib/seo-config";
 import { getSiteLogoUrl } from "@/lib/site-logo";
+import { getMetadataBase } from "@/lib/site-url";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,11 +28,41 @@ const titillium = Titillium_Web({
   display: "swap",
 });
 
+const metadataBase = getMetadataBase();
+
 export const metadata: Metadata = {
-  title:
-    "Gruppo Micologico Culturale Sandonatese | San Donà di Piave",
-  description:
-    "Gruppo micologico a San Donà di Piave: annunci, calendario, pubblicazioni e schede funghi.",
+  metadataBase,
+  title: {
+    default: `${SITE_NAME} | San Donà di Piave`,
+    template: `%s | ${SITE_NAME_SHORT}`,
+  },
+  description: DEFAULT_DESCRIPTION,
+  keywords: [...SEO_KEYWORDS],
+  authors: [{ name: SITE_NAME, url: metadataBase.href }],
+  creator: SITE_NAME,
+  openGraph: {
+    type: "website",
+    locale: "it_IT",
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} | San Donà di Piave`,
+    description: DEFAULT_DESCRIPTION,
+    url: metadataBase.href,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} | San Donà di Piave`,
+    description: DEFAULT_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export const viewport = {
@@ -37,12 +77,19 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const logoUrl = await getSiteLogoUrl();
+  const siteOrigin = getMetadataBase().origin;
+  const schemaGraph = {
+    "@context": "https://schema.org",
+    "@graph": [organizationJsonLd(siteOrigin), websiteJsonLd(siteOrigin)],
+  };
+
   return (
     <html
       lang="it"
       className={`${inter.variable} ${titillium.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[var(--surface-paper)] font-sans text-stone-900">
+        <JsonLd data={schemaGraph} />
         <SiteHeader logoUrl={logoUrl} />
         {children}
         <SiteFooter />
