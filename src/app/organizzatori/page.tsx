@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/auth-admin";
 import { getSiteCopy } from "@/lib/db-public";
+import { getPrisma } from "@/lib/prisma";
 import type { SiteCopyResolved } from "@/lib/site-copy";
 import {
   createAnnouncementAction,
@@ -15,9 +16,64 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-function Dashboard({ siteCopy }: { siteCopy: SiteCopyResolved }) {
+type SpeciesRow = { id: string; name: string; scientificName: string | null };
+
+function Dashboard({
+  siteCopy,
+  speciesList,
+}: {
+  siteCopy: SiteCopyResolved;
+  speciesList: SpeciesRow[];
+}) {
   return (
     <div className="flex flex-col gap-10">
+      <section className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm sm:p-6">
+        <h2 className="text-lg font-semibold text-emerald-950">
+          Schede funghi
+        </h2>
+        <p className="mt-1 text-sm text-stone-600">
+          Crea e modifica le schede pubblicate in{" "}
+          <Link href="/funghi" className="text-emerald-800 underline">
+            Funghi
+          </Link>
+          : testi, commestibilità, immagini (URL) e attribuzioni.
+        </p>
+        <Link
+          href="/organizzatori/schede/nuova"
+          className="mt-4 inline-block rounded-xl bg-emerald-900 px-4 py-2.5 text-sm font-medium text-white active:bg-emerald-950"
+        >
+          Nuova scheda
+        </Link>
+        {speciesList.length > 0 && (
+          <ul className="mt-6 divide-y divide-stone-100 border-t border-stone-100 pt-4">
+            {speciesList.map((s) => (
+              <li key={s.id} className="flex flex-wrap items-baseline justify-between gap-2 py-3 first:pt-0">
+                <div className="min-w-0">
+                  <span className="font-medium text-stone-900">{s.name}</span>
+                  {s.scientificName ? (
+                    <span className="ml-2 text-sm italic text-stone-500">
+                      {s.scientificName}
+                    </span>
+                  ) : null}
+                </div>
+                <Link
+                  href={`/organizzatori/schede/${s.id}`}
+                  className="shrink-0 text-sm font-medium text-emerald-800 underline"
+                >
+                  Modifica
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+        {speciesList.length === 0 && (
+          <p className="mt-4 text-sm text-stone-500">
+            Nessuna scheda ancora. Usa &quot;Nuova scheda&quot; per aggiungerne
+            una.
+          </p>
+        )}
+      </section>
+
       <section className="rounded-2xl border border-emerald-200/80 bg-emerald-50/40 p-5 shadow-sm sm:p-6">
         <h2 className="text-lg font-semibold text-emerald-950">
           Testi homepage
@@ -203,6 +259,19 @@ export default async function OrganizzatoriPage({ searchParams }: Props) {
   const msg = sp.msg;
   const siteCopy = await getSiteCopy();
 
+  let speciesList: SpeciesRow[] = [];
+  if (ok) {
+    try {
+      const prisma = getPrisma();
+      speciesList = await prisma.species.findMany({
+        orderBy: { name: "asc" },
+        select: { id: true, name: true, scientificName: true },
+      });
+    } catch {
+      speciesList = [];
+    }
+  }
+
   if (hasPassword && !ok) {
     redirect("/admin/login?next=/organizzatori");
   }
@@ -219,8 +288,8 @@ export default async function OrganizzatoriPage({ searchParams }: Props) {
         Area organizzatori
       </h1>
       <p className="mt-2 text-sm text-stone-600">
-        Testi della home, annunci con immagini e prossime attività. Serve la
-        password concordata con gli organizzatori.
+        Schede funghi, testi della home, annunci con immagini e prossime
+        attività. Serve la password concordata con gli organizzatori.
       </p>
 
       {err && (
@@ -244,6 +313,11 @@ export default async function OrganizzatoriPage({ searchParams }: Props) {
           Testi homepage salvati.
         </p>
       )}
+      {msg === "scheda-eliminata" && (
+        <p className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+          Scheda eliminata.
+        </p>
+      )}
 
       {!hasPassword && (
         <p className="mt-4 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
@@ -252,7 +326,9 @@ export default async function OrganizzatoriPage({ searchParams }: Props) {
         </p>
       )}
 
-      {hasPassword && ok && <Dashboard siteCopy={siteCopy} />}
+      {hasPassword && ok && (
+        <Dashboard siteCopy={siteCopy} speciesList={speciesList} />
+      )}
     </main>
   );
 }

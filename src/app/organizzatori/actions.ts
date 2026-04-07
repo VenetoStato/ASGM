@@ -97,6 +97,125 @@ export async function createAnnouncementAction(formData: FormData) {
   }
 }
 
+async function requireOrganizzatore(nextPath: string) {
+  if (!(await isAdminAuthenticated())) {
+    redirect(
+      `/admin/login?error=${encodeURIComponent("Sessione scaduta o non autorizzato")}&next=${encodeURIComponent(nextPath)}`,
+    );
+  }
+}
+
+function strOrNull(v: FormDataEntryValue | null) {
+  const s = String(v ?? "").trim();
+  return s || null;
+}
+
+export async function createSpeciesAction(formData: FormData) {
+  await requireOrganizzatore("/organizzatori/schede/nuova");
+  const name = String(formData.get("name") ?? "").trim();
+  if (!name) {
+    redirect(
+      `/organizzatori/schede/nuova?err=${encodeURIComponent("Nome comune obbligatorio")}`,
+    );
+  }
+
+  try {
+    const prisma = getPrisma();
+    const row = await prisma.species.create({
+      data: {
+        name,
+        scientificName: strOrNull(formData.get("scientificName")),
+        synonyms: strOrNull(formData.get("synonyms")),
+        habitat: strOrNull(formData.get("habitat")),
+        edibility: strOrNull(formData.get("edibility")),
+        notes: strOrNull(formData.get("notes")),
+        imageUrl: strOrNull(formData.get("imageUrl")),
+        imageAttribution: strOrNull(formData.get("imageAttribution")),
+        sourceName: strOrNull(formData.get("sourceName")),
+        sourceUrl: strOrNull(formData.get("sourceUrl")),
+        source: strOrNull(formData.get("source")),
+        autoImported: false,
+        lastSyncedAt: null,
+      },
+    });
+    revalidatePath("/");
+    revalidatePath("/funghi");
+    redirect(`/organizzatori/schede/${row.id}?msg=salvata`);
+  } catch (e) {
+    console.error(e);
+    redirect(
+      `/organizzatori/schede/nuova?err=${encodeURIComponent("Errore salvataggio scheda")}`,
+    );
+  }
+}
+
+export async function updateSpeciesAction(formData: FormData) {
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) {
+    redirect(`/organizzatori?err=${encodeURIComponent("Scheda non valida")}`);
+  }
+  await requireOrganizzatore(`/organizzatori/schede/${id}`);
+
+  const name = String(formData.get("name") ?? "").trim();
+  if (!name) {
+    redirect(
+      `/organizzatori/schede/${id}?err=${encodeURIComponent("Nome obbligatorio")}`,
+    );
+  }
+
+  try {
+    const prisma = getPrisma();
+    await prisma.species.update({
+      where: { id },
+      data: {
+        name,
+        scientificName: strOrNull(formData.get("scientificName")),
+        synonyms: strOrNull(formData.get("synonyms")),
+        habitat: strOrNull(formData.get("habitat")),
+        edibility: strOrNull(formData.get("edibility")),
+        notes: strOrNull(formData.get("notes")),
+        imageUrl: strOrNull(formData.get("imageUrl")),
+        imageAttribution: strOrNull(formData.get("imageAttribution")),
+        sourceName: strOrNull(formData.get("sourceName")),
+        sourceUrl: strOrNull(formData.get("sourceUrl")),
+        source: strOrNull(formData.get("source")),
+        autoImported: false,
+        lastSyncedAt: null,
+      },
+    });
+    revalidatePath("/");
+    revalidatePath("/funghi");
+    revalidatePath(`/funghi/${id}`);
+    redirect(`/organizzatori/schede/${id}?msg=salvata`);
+  } catch (e) {
+    console.error(e);
+    redirect(
+      `/organizzatori/schede/${id}?err=${encodeURIComponent("Errore aggiornamento")}`,
+    );
+  }
+}
+
+export async function deleteSpeciesAction(formData: FormData) {
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) {
+    redirect(`/organizzatori?err=${encodeURIComponent("Scheda non valida")}`);
+  }
+  await requireOrganizzatore(`/organizzatori/schede/${id}`);
+
+  try {
+    const prisma = getPrisma();
+    await prisma.species.delete({ where: { id } });
+    revalidatePath("/");
+    revalidatePath("/funghi");
+    redirect("/organizzatori?msg=scheda-eliminata");
+  } catch (e) {
+    console.error(e);
+    redirect(
+      `/organizzatori/schede/${id}?err=${encodeURIComponent("Impossibile eliminare")}`,
+    );
+  }
+}
+
 export async function saveSiteCopyAction(formData: FormData) {
   if (!(await isAdminAuthenticated())) {
     redirect(

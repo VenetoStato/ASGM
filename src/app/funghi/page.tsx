@@ -19,9 +19,16 @@ export default async function FunghiPage() {
         )}
         {species && species.length === 0 && (
           <div className="mt-8">
-            <EmptyState title="Le schede verranno pubblicate a breve.">
-              Puoi seguire gli aggiornamenti dalla home o dalla pagina Facebook
-              del gruppo.
+            <EmptyState title="Non ci sono ancora schede pubblicate.">
+              Gli organizzatori possono aggiungerle dall&apos;area riservata{" "}
+              <Link
+                href="/organizzatori"
+                className="font-medium text-emerald-800 underline"
+              >
+                Organizzatori
+              </Link>
+              . Puoi anche seguire gli aggiornamenti dalla home o dalla pagina
+              Facebook del gruppo.
             </EmptyState>
           </div>
         )}
