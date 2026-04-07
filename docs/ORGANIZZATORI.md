@@ -1,5 +1,7 @@
 # Guida rapida per chi gestisce il sito
 
+Checklist completa deploy: **[VERCEL.md](./VERCEL.md)**.
+
 ## Variabili su Vercel
 
 - `DATABASE_URL` — Postgres (Neon, Supabase, …).
