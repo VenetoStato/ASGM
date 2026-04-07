@@ -57,9 +57,12 @@ export function FacebookEmbedWithFallback({ pageUrl }: Props) {
         onLoad={onSdkLoad}
       />
       {!pluginLikelyBlocked && (
-        <div ref={wrapRef} className="min-h-[120px] w-full overflow-hidden">
+        <div
+          ref={wrapRef}
+          className="min-h-[120px] w-full max-w-full overflow-x-auto overflow-y-visible"
+        >
           <div
-            className="fb-page mx-auto max-w-[500px]"
+            className="fb-page mx-auto max-w-[min(100%,500px)]"
             data-href={pageUrl}
             data-tabs="timeline"
             data-width="500"

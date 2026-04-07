@@ -22,8 +22,8 @@ export function FeaturedSpeciesSection({
   const items = useDb ? fromDb.slice(0, 4) : null;
 
   return (
-    <section id="schede" className="scroll-mt-28">
-      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-stone-200/90 pb-4">
+    <div>
+      <div className="flex flex-col gap-3 border-b border-stone-200/90 pb-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-3">
         <div>
           <h2 className="text-2xl font-bold tracking-tight text-emerald-950">
             Schede funghi
@@ -34,7 +34,7 @@ export function FeaturedSpeciesSection({
         </div>
         <Link
           href="/funghi"
-          className="rounded-full bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-900 ring-1 ring-emerald-800/15 transition hover:bg-emerald-100"
+          className="w-full rounded-full bg-emerald-50 px-3 py-2.5 text-center text-sm font-semibold text-emerald-900 ring-1 ring-emerald-800/15 transition hover:bg-emerald-100 sm:w-auto sm:py-1.5"
         >
           Tutte le schede
         </Link>
@@ -87,6 +87,6 @@ export function FeaturedSpeciesSection({
               </li>
             ))}
       </ul>
-    </section>
+    </div>
   );
 }

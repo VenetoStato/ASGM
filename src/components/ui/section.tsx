@@ -28,7 +28,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`scroll-mt-24 border-stone-200/40 py-14 sm:scroll-mt-28 sm:py-16 ${bandClass[band]} ${className}`}
+      className={`scroll-mt-[4.5rem] border-stone-200/40 py-10 sm:scroll-mt-24 sm:py-14 ${bandClass[band]} ${className}`}
     >
       <div className={`mx-auto w-full px-4 ${inner}`}>{children}</div>
     </section>
@@ -50,7 +50,7 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div
-      className={`flex flex-wrap items-end justify-between gap-4 border-b border-stone-300/80 ${compact ? "pb-3" : "pb-4"}`}
+      className={`flex flex-col gap-3 border-b border-stone-300/80 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-4 ${compact ? "pb-3" : "pb-4"}`}
     >
       <div className="min-w-0 flex-1">
         <h2

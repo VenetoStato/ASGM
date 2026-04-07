@@ -37,9 +37,9 @@ function formatEventWhen(d: Date) {
 }
 
 const ctaPrimary =
-  "inline-flex min-w-[10rem] items-center justify-center rounded-2xl bg-white px-5 py-3 text-center text-sm font-semibold text-stone-900 shadow-lg shadow-black/15 transition hover:bg-amber-50 sm:text-base";
+  "inline-flex w-full items-center justify-center rounded-2xl bg-white px-4 py-3 text-center text-sm font-semibold text-stone-900 shadow-lg shadow-black/15 transition hover:bg-amber-50 sm:w-auto sm:min-w-[10rem] sm:px-5 sm:text-base";
 const ctaGhost =
-  "inline-flex min-w-[10rem] items-center justify-center rounded-2xl border border-white/30 bg-white/10 px-5 py-3 text-center text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 sm:text-base";
+  "inline-flex w-full items-center justify-center rounded-2xl border border-white/30 bg-white/10 px-4 py-3 text-center text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 sm:w-auto sm:min-w-[10rem] sm:px-5 sm:text-base";
 
 export default async function Home() {
   const [
@@ -53,8 +53,8 @@ export default async function Home() {
     weeklySpecies,
   ] = await Promise.all([
     getSiteCopy(),
-    listPublishedAnnouncements(5),
-    listUpcomingEvents(6),
+    listPublishedAnnouncements(3),
+    listUpcomingEvents(4),
     listSpecies(),
     fetchFacebookGraphPosts(),
     fetchFacebookPageMeta(),
@@ -68,7 +68,7 @@ export default async function Home() {
 
   return (
     <main className="flex flex-1 flex-col">
-      <section className="relative overflow-hidden border-b border-amber-900/25 bg-gradient-to-br from-[#0c1f14] via-emerald-950 to-stone-950 px-4 py-14 text-white sm:py-20">
+      <section className="relative overflow-hidden border-b border-amber-900/25 bg-gradient-to-br from-[#0c1f14] via-emerald-950 to-stone-950 px-4 py-10 text-white sm:py-16 md:py-20">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{
@@ -89,7 +89,7 @@ export default async function Home() {
           <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-stone-200/95 sm:text-lg">
             {copy.heroLead}
           </p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-8 grid grid-cols-2 gap-2 sm:mt-10 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
             <Link href="/#in-evidenza" className={ctaPrimary}>
               In evidenza
             </Link>
@@ -149,7 +149,7 @@ export default async function Home() {
               <p className="mt-2 text-lg font-semibold text-emerald-950">
                 {spotlight.item.title}
               </p>
-              <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-stone-700">
+              <p className="mt-3 text-sm leading-relaxed text-stone-700 sm:text-[15px]">
                 {spotlight.item.body}
               </p>
               <Link
@@ -165,7 +165,7 @@ export default async function Home() {
 
       <Section id="chi-siamo" band="default">
         <SectionHeader title="Chi siamo" />
-        <Prose className="mt-8">{copy.chiSiamo}</Prose>
+        <Prose className="mt-6 sm:mt-8">{copy.chiSiamo}</Prose>
       </Section>
 
       <Section id="pubblicazioni" band="muted">
@@ -210,7 +210,7 @@ export default async function Home() {
       </Section>
 
       <Section id="facebook" band="muted">
-        <FacebookSection graphPosts={fbPosts} pageMeta={pageMeta} />
+        <FacebookSection graphPosts={fbPosts} pageMeta={pageMeta} postLimit={2} />
       </Section>
 
       <Section id="annunci" band="paper">
@@ -265,7 +265,7 @@ export default async function Home() {
                         <h3 className="text-lg font-semibold text-emerald-950 sm:text-xl">
                           {a.title}
                         </h3>
-                        <p className="mt-3 line-clamp-4 whitespace-pre-wrap text-[15px] leading-relaxed text-stone-700 sm:line-clamp-6">
+                        <p className="mt-3 max-h-[min(28rem,70vh)] overflow-y-auto whitespace-pre-wrap text-[15px] leading-relaxed text-stone-700">
                           {a.body}
                         </p>
                       </div>
@@ -322,33 +322,24 @@ export default async function Home() {
         </div>
       </Section>
 
-      <Section id="altre-sezioni" band="muted" className="pb-20">
-        <div className="grid gap-5 sm:grid-cols-2">
-          <Link href="/funghi" className="group block">
-            <ContentCard className="h-full">
-              <h3 className="text-lg font-semibold text-emerald-950">
-                Tutte le schede funghi
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-stone-600">
-                Elenco completo delle specie pubblicate sul sito.
-              </p>
-              <span className="mt-4 inline-block text-sm font-semibold text-emerald-800 group-hover:underline">
-                Apri →
-              </span>
-            </ContentCard>
+      <Section id="nav-extra" band="muted" className="pb-12 sm:pb-16">
+        <p className="text-center text-sm text-stone-600">
+          <Link
+            href="/funghi"
+            className="font-semibold text-emerald-800 underline decoration-emerald-800/30 underline-offset-2"
+          >
+            Schede funghi
           </Link>
-          <Link href="/news" className="group block">
-            <ContentCard className="h-full">
-              <h3 className="text-lg font-semibold text-emerald-950">News</h3>
-              <p className="mt-2 text-sm leading-relaxed text-stone-600">
-                Articoli e brevi dal gruppo.
-              </p>
-              <span className="mt-4 inline-block text-sm font-semibold text-emerald-800 group-hover:underline">
-                Apri →
-              </span>
-            </ContentCard>
+          <span className="mx-2 text-stone-400" aria-hidden>
+            ·
+          </span>
+          <Link
+            href="/news"
+            className="font-semibold text-emerald-800 underline decoration-emerald-800/30 underline-offset-2"
+          >
+            News
           </Link>
-        </div>
+        </p>
       </Section>
     </main>
   );

@@ -25,13 +25,23 @@ function excerpt(text: string | null, max = 220) {
 type Props = {
   graphPosts: FacebookPost[] | null;
   pageMeta: FacebookPageMeta | null;
+  /** Anteprima post in home: limita per non allungare troppo la pagina. */
+  postLimit?: number;
 };
 
-export function FacebookSection({ graphPosts, pageMeta }: Props) {
-  const hasCards = Boolean(graphPosts && graphPosts.length > 0);
+export function FacebookSection({
+  graphPosts,
+  pageMeta,
+  postLimit = 6,
+}: Props) {
+  const cards =
+    graphPosts && postLimit > 0
+      ? graphPosts.slice(0, postLimit)
+      : graphPosts;
+  const hasCards = Boolean(cards && cards.length > 0);
 
   return (
-    <section id="facebook" className="scroll-mt-28">
+    <div>
       <SectionHeader
         title="Dal gruppo su Facebook"
         description={
@@ -72,9 +82,9 @@ export function FacebookSection({ graphPosts, pageMeta }: Props) {
         </div>
       )}
 
-      {hasCards && graphPosts && (
+      {hasCards && cards && (
         <ul className="mt-8 flex flex-col gap-4">
-          {graphPosts.map((p) => (
+          {cards.map((p) => (
             <li key={p.id}>
               <ContentCard hover className="overflow-hidden p-0">
                 {p.full_picture && (
@@ -144,6 +154,6 @@ export function FacebookSection({ graphPosts, pageMeta }: Props) {
           </Link>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

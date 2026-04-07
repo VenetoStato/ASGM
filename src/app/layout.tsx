@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Titillium_Web } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getSiteLogoUrl } from "@/lib/site-logo";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const titillium = Titillium_Web({
+  weight: ["400", "600", "700"],
   subsets: ["latin"],
+  variable: "--font-titillium",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -37,9 +40,9 @@ export default async function RootLayout({
   return (
     <html
       lang="it"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${titillium.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[var(--surface-paper)] text-stone-900">
+      <body className="min-h-full flex flex-col bg-[var(--surface-paper)] font-sans text-stone-900">
         <SiteHeader logoUrl={logoUrl} />
         {children}
         <SiteFooter />
