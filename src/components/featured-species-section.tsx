@@ -12,40 +12,57 @@ type Props = {
   fromDb: SpeciesCard[] | null;
   /** Ultima specie importata dal cron (badge “in evidenza”). */
   weeklyHighlightId?: string | null;
+  /** Se true, niente titolo (es. dentro un disclosure sulla home). */
+  embedded?: boolean;
 };
 
 export function FeaturedSpeciesSection({
   fromDb,
   weeklyHighlightId,
+  embedded = false,
 }: Props) {
   const useDb = fromDb && fromDb.length > 0;
-  const items = useDb ? fromDb.slice(0, 4) : null;
+  const items = useDb ? fromDb.slice(0, 6) : null;
 
   return (
     <div>
-      <div className="flex flex-col gap-3 border-b border-stone-200/90 pb-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-3">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-emerald-950">
-            Schede funghi
-          </h2>
-          <p className="mt-1 text-sm text-stone-500">
-            Alcune specie di riferimento — consulta sempre guide aggiornate
-          </p>
+      {!embedded && (
+        <div className="flex flex-col gap-2 border-b border-stone-200/90 pb-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-3">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight text-emerald-950 sm:text-2xl">
+              Schede funghi
+            </h2>
+            <p className="mt-0.5 text-xs text-stone-500 sm:text-sm">
+              Alcune specie di riferimento — consulta sempre guide aggiornate
+            </p>
+          </div>
+          <Link
+            href="/funghi"
+            className="w-full rounded-full bg-emerald-50 px-3 py-2 text-center text-sm font-semibold text-emerald-900 ring-1 ring-emerald-800/15 transition hover:bg-emerald-100 sm:w-auto"
+          >
+            Tutte le schede
+          </Link>
         </div>
-        <Link
-          href="/funghi"
-          className="w-full rounded-full bg-emerald-50 px-3 py-2.5 text-center text-sm font-semibold text-emerald-900 ring-1 ring-emerald-800/15 transition hover:bg-emerald-100 sm:w-auto sm:py-1.5"
-        >
-          Tutte le schede
-        </Link>
-      </div>
-      <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+      )}
+      {embedded && (
+        <div className="mb-3 flex justify-end">
+          <Link
+            href="/funghi"
+            className="rounded-full bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-900 ring-1 ring-emerald-800/15 transition hover:bg-emerald-100"
+          >
+            Tutte le schede →
+          </Link>
+        </div>
+      )}
+      <ul
+        className={`grid gap-2 sm:grid-cols-2 ${embedded ? "mt-0" : "mt-4 sm:mt-5"}`}
+      >
         {useDb && items
           ? items.map((s) => (
               <li key={s.id}>
                 <Link
                   href={`/funghi/${s.id}`}
-                  className="relative block h-full rounded-2xl border border-stone-200/90 bg-white p-5 shadow-sm ring-1 ring-stone-900/[0.03] transition hover:border-emerald-200/80 hover:shadow-md"
+                  className="relative block h-full rounded-xl border border-stone-200/90 bg-white p-3 shadow-sm ring-1 ring-stone-900/[0.03] transition hover:border-emerald-200/80 hover:shadow-md sm:p-4"
                 >
                   {weeklyHighlightId === s.id && (
                     <span className="absolute right-3 top-3 rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-950 ring-1 ring-amber-300/80">

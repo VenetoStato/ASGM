@@ -28,7 +28,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`scroll-mt-[4.5rem] border-stone-200/40 py-10 sm:scroll-mt-24 sm:py-14 ${bandClass[band]} ${className}`}
+      className={`scroll-mt-[4.5rem] border-stone-200/40 py-5 sm:scroll-mt-24 sm:py-8 ${bandClass[band]} ${className}`}
     >
       <div className={`mx-auto w-full px-4 ${inner}`}>{children}</div>
     </section>
@@ -84,7 +84,7 @@ export function ContentCard({
 }: ContentCardProps) {
   return (
     <Tag
-      className={`rounded-2xl border border-stone-200/90 bg-white p-5 shadow-[var(--shadow-card)] ring-1 ring-stone-900/[0.03] sm:p-6 ${hover ? "transition hover:border-emerald-800/20 hover:shadow-md" : ""} ${className}`}
+      className={`rounded-2xl border border-stone-200/90 bg-white p-4 shadow-[var(--shadow-card)] ring-1 ring-stone-900/[0.03] sm:p-5 ${hover ? "transition hover:border-emerald-800/20 hover:shadow-md" : ""} ${className}`}
     >
       {children}
     </Tag>
@@ -114,7 +114,7 @@ type EmptyStateProps = {
 
 export function EmptyState({ title, children, action }: EmptyStateProps) {
   return (
-    <div className="rounded-2xl border border-dashed border-stone-300 bg-stone-50/90 px-5 py-10 text-center sm:px-8">
+    <div className="rounded-2xl border border-dashed border-stone-300 bg-stone-50/90 px-4 py-6 text-center sm:px-6 sm:py-8">
       <p className="text-base font-medium text-stone-800">{title}</p>
       {children && (
         <div className="mt-2 text-sm leading-relaxed text-stone-600">

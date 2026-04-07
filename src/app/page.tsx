@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FacebookIcon } from "@/components/facebook-brand";
 import { FacebookSection } from "@/components/facebook-section";
 import { FeaturedSpeciesSection } from "@/components/featured-species-section";
 import {
@@ -14,6 +15,7 @@ import {
   listSpecies,
   listUpcomingEvents,
 } from "@/lib/db-public";
+import { CompactDisclosure } from "@/components/ui/disclosure";
 import {
   ContentCard,
   EmptyState,
@@ -74,7 +76,7 @@ export default async function Home() {
 
   return (
     <main className="flex flex-1 flex-col">
-      <section className="relative overflow-hidden border-b border-amber-900/25 bg-gradient-to-br from-[#0c1f14] via-emerald-950 to-stone-950 px-4 py-10 text-white sm:py-16 md:py-20">
+      <section className="relative overflow-hidden border-b border-amber-900/25 bg-gradient-to-br from-[#0c1f14] via-emerald-950 to-stone-950 px-4 py-6 text-white sm:py-10 md:py-14">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{
@@ -95,7 +97,7 @@ export default async function Home() {
           <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-stone-200/95 sm:text-lg">
             {copy.heroLead}
           </p>
-          <div className="mt-8 grid grid-cols-2 gap-2 sm:mt-10 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
+          <div className="mt-6 grid grid-cols-2 gap-2 sm:mt-8 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
             <Link href="/#in-evidenza" className={ctaPrimary}>
               In evidenza
             </Link>
@@ -105,20 +107,26 @@ export default async function Home() {
             <Link href="/#annunci" className={ctaGhost}>
               Annunci
             </Link>
-            <Link href="/#facebook" className={ctaGhost}>
+            <Link
+              href="/#facebook"
+              className={`${ctaGhost} inline-flex items-center justify-center gap-2`}
+            >
+              <span className="inline-flex rounded bg-white/95 p-0.5 shadow-sm">
+                <FacebookIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+              </span>
               Facebook
             </Link>
           </div>
         </div>
       </section>
 
-      <Section id="in-evidenza" band="paper" narrow>
+      <Section id="in-evidenza" band="paper" narrow className="!pt-4 sm:!pt-5">
         <SectionHeader
           compact
           title="In evidenza"
           description="La prossima attività in programma o l’ultimo annuncio pubblicato."
         />
-        <div className="mt-6">
+        <div className="mt-3 sm:mt-4">
           {!spotlight && (
             <EmptyState title="Nessun contenuto in evidenza al momento.">
               Torna a trovarci presto o consulta il calendario e gli annunci
@@ -169,70 +177,110 @@ export default async function Home() {
         </div>
       </Section>
 
-      <Section id="chi-siamo" band="default">
-        <SectionHeader title="Chi siamo" />
-        <Prose className="mt-6 sm:mt-8">{copy.chiSiamo}</Prose>
+      <Section band="default">
+        <CompactDisclosure
+          id="chi-siamo"
+          title="Chi siamo"
+          subtitle="Presentazione del gruppo — tocca per aprire"
+          defaultOpen={false}
+        >
+          <Prose className="text-sm text-stone-800 sm:text-[15px]">
+            {copy.chiSiamo}
+          </Prose>
+        </CompactDisclosure>
       </Section>
 
       <Section id="pubblicazioni" band="muted">
-        <div className="grid gap-5 md:grid-cols-2">
-          <ContentCard>
-            <h3 className="text-lg font-semibold text-emerald-950">
-              Pubblicazioni e materiali
-            </h3>
-            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-stone-600 sm:text-[15px]">
-              {copy.pubblicazioni}
-            </p>
-          </ContentCard>
-          <ContentCard>
-            <h3 className="text-lg font-semibold text-emerald-950">
-              Calendario e attività
-            </h3>
-            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-stone-600 sm:text-[15px]">
-              {copy.calendarioAttivita}
-            </p>
-            <Link
-              href="/eventi"
-              className="mt-4 inline-block text-sm font-semibold text-emerald-800 hover:underline"
-            >
-              Vai al calendario completo →
-            </Link>
-          </ContentCard>
-        </div>
+        <CompactDisclosure
+          title="Pubblicazioni e calendario"
+          subtitle="Materiali del gruppo e attività"
+          defaultOpen={false}
+        >
+          <div className="grid gap-3 md:grid-cols-2">
+            <ContentCard>
+              <h3 className="text-base font-semibold text-emerald-950 sm:text-lg">
+                Pubblicazioni e materiali
+              </h3>
+              <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-stone-600">
+                {copy.pubblicazioni}
+              </p>
+            </ContentCard>
+            <ContentCard>
+              <h3 className="text-base font-semibold text-emerald-950 sm:text-lg">
+                Calendario e attività
+              </h3>
+              <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-stone-600">
+                {copy.calendarioAttivita}
+              </p>
+              <Link
+                href="/eventi"
+                className="mt-3 inline-block text-sm font-semibold text-emerald-800 hover:underline"
+              >
+                Calendario completo →
+              </Link>
+            </ContentCard>
+          </div>
+        </CompactDisclosure>
       </Section>
 
       <Section id="sostegno" band="accent" narrow>
-        <ContentCard hover={false} className="border-amber-200/90 bg-white/90">
-          <SectionHeader compact title="Sostegno al gruppo" />
-          <Prose className="mt-4 text-stone-800">{copy.sostegno}</Prose>
-        </ContentCard>
+        <CompactDisclosure
+          title="Sostegno al gruppo"
+          subtitle="5×1000 e contributi"
+          defaultOpen={false}
+        >
+          <Prose className="text-sm text-stone-800 sm:text-[15px]">
+            {copy.sostegno}
+          </Prose>
+        </CompactDisclosure>
       </Section>
 
       <Section id="schede" band="default">
-        <FeaturedSpeciesSection
-          fromDb={featuredSpecies}
-          weeklyHighlightId={weeklyId}
-        />
+        <CompactDisclosure
+          title="Schede funghi"
+          subtitle="Schede divulgative con riferimento a Wikipedia (IT) e foto Wikimedia"
+          defaultOpen
+        >
+          <FeaturedSpeciesSection
+            embedded
+            fromDb={featuredSpecies}
+            weeklyHighlightId={weeklyId}
+          />
+        </CompactDisclosure>
       </Section>
 
-      <Section id="facebook" band="muted">
-        <FacebookSection graphPosts={fbPosts} pageMeta={pageMeta} postLimit={2} />
+      <Section band="muted">
+        <CompactDisclosure
+          id="facebook"
+          title="Facebook del gruppo"
+          subtitle="Post, pagina e timeline (caricamento ottimizzato anche su mobile)"
+          defaultOpen
+        >
+          <FacebookSection
+            graphPosts={fbPosts}
+            pageMeta={pageMeta}
+            postLimit={2}
+            showHeader={false}
+          />
+        </CompactDisclosure>
       </Section>
 
       <Section id="annunci" band="paper">
-        <SectionHeader
+        <CompactDisclosure
+          id="annunci"
           title="Annunci"
-          description="Novità e comunicazioni del gruppo."
-          action={
+          subtitle="Novità e comunicazioni"
+          defaultOpen
+        >
+          <div className="mb-3 flex justify-end">
             <Link
               href="/annunci"
-              className="rounded-full bg-emerald-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-950"
+              className="rounded-full bg-emerald-900 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-950"
             >
-              Archivio
+              Archivio annunci
             </Link>
-          }
-        />
-        <div className="mt-8">
+          </div>
+          <div className="mt-1">
           {!announcements && (
             <EmptyState title="Annunci temporaneamente non disponibili." />
           )}
@@ -250,7 +298,7 @@ export default async function Home() {
             />
           )}
           {announcements && announcements.length > 0 && (
-            <ul className="flex flex-col gap-6">
+            <ul className="flex flex-col gap-3">
               {announcements.map((a) => {
                 const imgs = parseImages(a.images).slice(0, 3);
                 return (
@@ -267,8 +315,8 @@ export default async function Home() {
                           />
                         </div>
                       )}
-                      <div className="p-5 sm:p-6">
-                        <h3 className="text-lg font-semibold text-emerald-950 sm:text-xl">
+                      <div className="p-4 sm:p-5">
+                        <h3 className="text-base font-semibold text-emerald-950 sm:text-lg">
                           {a.title}
                         </h3>
                         <p className="mt-3 max-h-[min(28rem,70vh)] overflow-y-auto whitespace-pre-wrap text-[15px] leading-relaxed text-stone-700">
@@ -281,23 +329,25 @@ export default async function Home() {
               })}
             </ul>
           )}
-        </div>
+          </div>
+        </CompactDisclosure>
       </Section>
 
       <Section id="date" band="default">
-        <SectionHeader
+        <CompactDisclosure
           title="Prossime date"
-          description="Uscite e attività in programma."
-          action={
+          subtitle="Uscite e attività in programma"
+          defaultOpen
+        >
+          <div className="mb-3 flex justify-end">
             <Link
               href="/eventi"
-              className="rounded-full bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-950 ring-1 ring-emerald-900/15 hover:bg-emerald-100"
+              className="rounded-full bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-950 ring-1 ring-emerald-900/15 hover:bg-emerald-100"
             >
-              Calendario
+              Calendario completo
             </Link>
-          }
-        />
-        <div className="mt-8">
+          </div>
+          <div className="mt-1">
           {!upcoming && (
             <EmptyState title="Calendario non disponibile al momento." />
           )}
@@ -305,7 +355,7 @@ export default async function Home() {
             <EmptyState title="Nessuna data futura in elenco." />
           )}
           {upcoming && upcoming.length > 0 && (
-            <ul className="flex flex-col gap-3">
+            <ul className="flex flex-col gap-2">
               {upcoming.map((ev) => (
                 <li key={ev.id}>
                   <ContentCard>
@@ -325,10 +375,11 @@ export default async function Home() {
               ))}
             </ul>
           )}
-        </div>
+          </div>
+        </CompactDisclosure>
       </Section>
 
-      <Section id="nav-extra" band="muted" className="pb-12 sm:pb-16">
+      <Section id="nav-extra" band="muted" className="pb-6 sm:pb-8">
         <p className="text-center text-sm text-stone-600">
           <Link
             href="/funghi"

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { FacebookPageMeta, FacebookPost } from "@/lib/facebook-posts";
 import { FACEBOOK_PAGE_URL } from "@/lib/public-site";
+import { FacebookPageLink } from "./facebook-brand";
 import { FacebookEmbedWithFallback } from "./facebook-embed-fallback";
 import { ContentCard, SectionHeader } from "./ui/section";
 
@@ -27,12 +28,15 @@ type Props = {
   pageMeta: FacebookPageMeta | null;
   /** Anteprima post in home: limita per non allungare troppo la pagina. */
   postLimit?: number;
+  /** Se false, nasconde il titolo grande (es. dentro un disclosure). */
+  showHeader?: boolean;
 };
 
 export function FacebookSection({
   graphPosts,
   pageMeta,
   postLimit = 6,
+  showHeader = true,
 }: Props) {
   const cards =
     graphPosts && postLimit > 0
@@ -42,27 +46,39 @@ export function FacebookSection({
 
   return (
     <div>
-      <SectionHeader
-        title="Dal gruppo su Facebook"
-        description={
-          pageMeta?.name
-            ? `Aggiornamenti dalla pagina «${pageMeta.name}». I post qui sotto rimandano sempre alla pagina ufficiale.`
-            : "Aggiornamenti dalla pagina Facebook del gruppo. I contenuti si aggiornano automaticamente."
-        }
-        action={
-          <Link
+      {showHeader ? (
+        <SectionHeader
+          title="Dal gruppo su Facebook"
+          description={
+            pageMeta?.name
+              ? `Aggiornamenti dalla pagina «${pageMeta.name}». I post qui sotto rimandano sempre alla pagina ufficiale.`
+              : "Aggiornamenti dalla pagina Facebook del gruppo. I contenuti si aggiornano automaticamente."
+          }
+          action={
+            <FacebookPageLink href={FACEBOOK_PAGE_URL} variant="solid">
+              Apri su Facebook
+            </FacebookPageLink>
+          }
+        />
+      ) : (
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-xs text-stone-600 sm:text-sm">
+            {pageMeta?.name
+              ? `Pagina «${pageMeta.name}»`
+              : "Pagina Facebook del gruppo"}
+          </p>
+          <FacebookPageLink
             href={FACEBOOK_PAGE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex rounded-full bg-[#1877F2] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-[#166fe5]"
+            variant="solid"
+            className="py-2 text-xs sm:text-sm"
           >
             Apri su Facebook
-          </Link>
-        }
-      />
+          </FacebookPageLink>
+        </div>
+      )}
 
       {(pageMeta?.pictureUrl || pageMeta?.name) && (
-        <div className="mt-6 flex items-center gap-3 rounded-xl border border-stone-200/90 bg-white px-4 py-3 shadow-sm">
+        <div className="mt-3 flex items-center gap-3 rounded-xl border border-stone-200/90 bg-white px-3 py-2 shadow-sm sm:mt-4 sm:px-4 sm:py-3">
           {pageMeta.pictureUrl && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -83,7 +99,7 @@ export function FacebookSection({
       )}
 
       {hasCards && cards && (
-        <ul className="mt-8 flex flex-col gap-4">
+        <ul className="mt-4 flex flex-col gap-3 sm:mt-5">
           {cards.map((p) => (
             <li key={p.id}>
               <ContentCard hover className="overflow-hidden p-0">
@@ -130,28 +146,23 @@ export function FacebookSection({
       )}
 
       {!hasCards && (
-        <p className="mt-6 rounded-xl border border-stone-200 bg-stone-50 px-4 py-3 text-sm text-stone-600">
+        <p className="mt-4 rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-600">
           Per mostrare qui l&apos;anteprima dei post serve il token di pagina
           configurato sul server; in ogni caso il riquadro sotto e il pulsante
           aprono sempre la pagina aggiornata.
         </p>
       )}
 
-      <div className="mt-8 rounded-2xl border border-stone-200/90 bg-[var(--surface-muted)] p-4 sm:p-6">
-        <p className="mb-4 text-center text-sm text-stone-600">
+      <div className="mt-4 rounded-xl border border-stone-200/90 bg-[var(--surface-muted)] p-3 sm:mt-5 sm:p-4">
+        <p className="mb-3 text-center text-xs text-stone-600 sm:text-sm">
           Timeline della pagina (aggiornata da Facebook). Se non vedi il
           riquadro, usa il pulsante qui sotto.
         </p>
         <FacebookEmbedWithFallback pageUrl={FACEBOOK_PAGE_URL} />
-        <div className="mt-6 flex justify-center">
-          <Link
-            href={FACEBOOK_PAGE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex rounded-full border-2 border-[#1877F2]/40 bg-white px-6 py-3 text-sm font-semibold text-[#1877F2] hover:bg-blue-50"
-          >
-            Vai alla pagina Facebook del gruppo
-          </Link>
+        <div className="mt-4 flex justify-center">
+          <FacebookPageLink href={FACEBOOK_PAGE_URL} variant="outline">
+            Pagina Facebook del gruppo
+          </FacebookPageLink>
         </div>
       </div>
     </div>
