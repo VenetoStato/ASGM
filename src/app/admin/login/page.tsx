@@ -2,7 +2,7 @@ import Link from "next/link";
 import { loginFormAction } from "@/app/organizzatori/actions";
 
 export const metadata = {
-  title: "Accesso organizzatori — ASGM",
+  title: "Accesso organizzatori",
   robots: { index: false, follow: false },
 };
 
@@ -32,11 +32,7 @@ export default async function AdminLoginPage({ searchParams }: Props) {
           Accesso organizzatori
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-stone-600">
-          Password da variabile{" "}
-          <code className="rounded-md bg-stone-100 px-1.5 py-0.5 font-mono text-xs text-stone-800">
-            ADMIN_PASSWORD
-          </code>{" "}
-          (locale e hosting).
+          Inserisci la password fornita agli organizzatori del gruppo.
         </p>
 
         {err && (

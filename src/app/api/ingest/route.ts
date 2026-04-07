@@ -18,7 +18,7 @@ export async function POST(req: Request) {
   const secret = process.env.INGEST_SECRET;
   if (!secret) {
     return NextResponse.json(
-      { error: "INGEST_SECRET non configurato sul server" },
+      { error: "Servizio non configurato" },
       { status: 500 },
     );
   }
@@ -150,7 +150,7 @@ export async function POST(req: Request) {
   } catch (e) {
     console.error(e);
     return NextResponse.json(
-      { error: "Errore database", hint: "Verifica DATABASE_URL e migrazioni" },
+      { error: "Errore nel salvataggio" },
       { status: 500 },
     );
   }

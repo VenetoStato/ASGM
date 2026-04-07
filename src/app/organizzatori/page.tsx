@@ -219,8 +219,8 @@ export default async function OrganizzatoriPage({ searchParams }: Props) {
         Area organizzatori
       </h1>
       <p className="mt-2 text-sm text-stone-600">
-        Testi della home, annunci con immagini e prossime attività. Password in{" "}
-        <code className="rounded bg-stone-200 px-1">ADMIN_PASSWORD</code>.
+        Testi della home, annunci con immagini e prossime attività. Serve la
+        password concordata con gli organizzatori.
       </p>
 
       {err && (
@@ -247,8 +247,8 @@ export default async function OrganizzatoriPage({ searchParams }: Props) {
 
       {!hasPassword && (
         <p className="mt-4 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-          Configura la variabile{" "}
-          <code className="font-mono">ADMIN_PASSWORD</code> nel progetto.
+          L&apos;accesso per gli organizzatori non è ancora attivo sul server.
+          Contatta chi gestisce il sito.
         </p>
       )}
 

@@ -9,14 +9,13 @@ export default async function FunghiPage() {
       <h1 className="text-3xl font-semibold text-emerald-950">Funghi</h1>
       {!species && (
         <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
-          Database non configurato o non raggiungibile. Imposta{" "}
-          <code className="rounded bg-amber-100 px-1">DATABASE_URL</code> su Vercel.
+          Le schede non sono disponibili al momento. Riprova più tardi.
         </p>
       )}
       {species && species.length === 0 && (
         <p className="text-stone-600">
-          Nessuna scheda. Aggiungi specie tramite{" "}
-          <code className="rounded bg-stone-200 px-1 text-sm">/api/ingest</code>.
+          Le schede verranno pubblicate a breve. Controlla di nuovo tra qualche
+          giorno o segui gli aggiornamenti nella home.
         </p>
       )}
       {species && species.length > 0 && (

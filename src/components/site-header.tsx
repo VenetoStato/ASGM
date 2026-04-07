@@ -3,15 +3,16 @@ import Link from "next/link";
 const links = [
   { href: "/", label: "Home" },
   { href: "/#chi-siamo", label: "Chi siamo" },
-  { href: "/#pubblicazioni", label: "Info" },
+  { href: "/#schede", label: "Schede" },
+  { href: "/#facebook", label: "Facebook" },
   { href: "/#annunci", label: "Annunci" },
   { href: "/#date", label: "Date" },
   { href: "/eventi", label: "Eventi" },
   { href: "/annunci", label: "Tutti" },
   { href: "/funghi", label: "Funghi" },
   { href: "/news", label: "News" },
-  { href: "/admin/login", label: "Admin" },
-];
+  { href: "/admin/login", label: "Organizzatori" },
+] as const;
 
 export function SiteHeader() {
   return (

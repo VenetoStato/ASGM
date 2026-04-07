@@ -14,12 +14,11 @@ export default async function NewsPage() {
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-4 py-12">
       <h1 className="text-3xl font-semibold text-emerald-950">News dal gruppo</h1>
       <p className="text-sm text-stone-600">
-        Testi inviati tramite ingest (OpenClaw) e pubblicati dal job giornaliero se{" "}
-        <code className="rounded bg-stone-200 px-1">autoPublish</code> è attivo.
+        Articoli e brevi dal gruppo, pubblicati quando disponibili.
       </p>
       {!items && (
         <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
-          Database non configurato. Imposta <code className="rounded bg-amber-100 px-1">DATABASE_URL</code>.
+          Le news non sono disponibili al momento. Riprova più tardi.
         </p>
       )}
       {items && items.length === 0 && (

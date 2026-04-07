@@ -1,7 +1,11 @@
 import Link from "next/link";
+import { FacebookSection } from "@/components/facebook-section";
+import { FeaturedSpeciesSection } from "@/components/featured-species-section";
+import { fetchFacebookGraphPosts } from "@/lib/facebook-posts";
 import {
   getSiteCopy,
   listPublishedAnnouncements,
+  listSpecies,
   listUpcomingEvents,
 } from "@/lib/db-public";
 
@@ -21,11 +25,16 @@ function formatEventWhen(d: Date) {
 }
 
 export default async function Home() {
-  const [copy, announcements, upcoming] = await Promise.all([
+  const [copy, announcements, upcoming, species, fbPosts] = await Promise.all([
     getSiteCopy(),
     listPublishedAnnouncements(5),
     listUpcomingEvents(6),
+    listSpecies(),
+    fetchFacebookGraphPosts(),
   ]);
+
+  const featuredSpecies =
+    species && species.length > 0 ? species : null;
 
   return (
     <main className="flex flex-1 flex-col pb-16">
@@ -68,6 +77,12 @@ export default async function Home() {
               className="rounded-2xl border-2 border-white/35 bg-white/10 px-6 py-3.5 text-center text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 active:scale-[0.98] sm:min-w-[11rem]"
             >
               Prossime date
+            </Link>
+            <Link
+              href="/#schede"
+              className="rounded-2xl border border-white/25 bg-white/10 px-6 py-3.5 text-center text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 active:scale-[0.98] sm:min-w-[11rem]"
+            >
+              Schede funghi
             </Link>
             <Link
               href="/admin/login"
@@ -124,6 +139,10 @@ export default async function Home() {
           </p>
         </section>
 
+        <FeaturedSpeciesSection fromDb={featuredSpecies} />
+
+        <FacebookSection graphPosts={fbPosts} />
+
         <section id="annunci" className="scroll-mt-28">
           <div className="flex flex-wrap items-end justify-between gap-3 border-b border-stone-200/90 pb-4">
             <div>
@@ -143,7 +162,7 @@ export default async function Home() {
           </div>
           {!announcements && (
             <p className="mt-4 rounded-xl border border-amber-200/80 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-              Database non configurato.
+              Gli annunci non sono disponibili al momento. Riprova più tardi.
             </p>
           )}
           {announcements && announcements.length === 0 && (
@@ -226,7 +245,8 @@ export default async function Home() {
           </div>
           {!upcoming && (
             <p className="mt-4 text-sm text-stone-500">
-              Calendario non disponibile.
+              Le date non sono disponibili al momento. Controlla la sezione
+              Eventi più tardi.
             </p>
           )}
           {upcoming && upcoming.length === 0 && (

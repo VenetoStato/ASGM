@@ -29,7 +29,7 @@ export default async function AnnunciPage() {
       </h1>
       {!items && (
         <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900">
-          Database non disponibile.
+          Gli annunci non sono disponibili al momento.
         </p>
       )}
       {items && items.length === 0 && (

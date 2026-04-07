@@ -15,16 +15,13 @@ export default async function EventiPage() {
       <h1 className="text-3xl font-semibold text-emerald-950">Eventi</h1>
       {!events && (
         <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
-          Database non configurato o non raggiungibile. Imposta{" "}
-          <code className="rounded bg-amber-100 px-1">DATABASE_URL</code> su Vercel
-          ed esegui le migrazioni.
+          Il calendario non è disponibile al momento. Riprova più tardi.
         </p>
       )}
       {events && events.length === 0 && (
         <p className="text-stone-600">
-          Nessun evento pubblicato. Aggiungine uno tramite API{" "}
-          <code className="rounded bg-stone-200 px-1 text-sm">/api/ingest</code>{" "}
-          (OpenClaw).
+          Nessun evento in elenco. Gli organizzatori possono aggiungere date
+          dall&apos;area riservata.
         </p>
       )}
       {events && events.length > 0 && (

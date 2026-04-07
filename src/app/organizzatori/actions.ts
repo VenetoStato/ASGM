@@ -19,7 +19,7 @@ function safeInternalPath(raw: string): string {
 export async function loginOrganizzatori(password: string) {
   const expected = process.env.ADMIN_PASSWORD;
   if (!expected) {
-    return { ok: false as const, error: "ADMIN_PASSWORD non configurato" };
+    return { ok: false as const, error: "Accesso non ancora configurato" };
   }
   if (password !== expected) {
     return { ok: false as const, error: "Password errata" };
