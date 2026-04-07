@@ -97,6 +97,57 @@ export async function createAnnouncementAction(formData: FormData) {
   }
 }
 
+export async function saveSiteCopyAction(formData: FormData) {
+  if (!(await isAdminAuthenticated())) {
+    redirect(
+      `/admin/login?error=${encodeURIComponent("Sessione scaduta o non autorizzato")}&next=${encodeURIComponent("/organizzatori")}`,
+    );
+  }
+
+  const heroTitle = String(formData.get("heroTitle") ?? "").trim();
+  const heroSubtitle = String(formData.get("heroSubtitle") ?? "").trim();
+  const heroLead = String(formData.get("heroLead") ?? "").trim();
+  const chiSiamo = String(formData.get("chiSiamo") ?? "").trim();
+  const pubblicazioni = String(formData.get("pubblicazioni") ?? "").trim();
+  const calendarioAttivita = String(
+    formData.get("calendarioAttivita") ?? "",
+  ).trim();
+  const sostegno = String(formData.get("sostegno") ?? "").trim();
+
+  try {
+    const prisma = getPrisma();
+    await prisma.siteSettings.upsert({
+      where: { id: "default" },
+      create: {
+        id: "default",
+        heroTitle: heroTitle || null,
+        heroSubtitle: heroSubtitle || null,
+        heroLead: heroLead || null,
+        chiSiamo: chiSiamo || null,
+        pubblicazioni: pubblicazioni || null,
+        calendarioAttivita: calendarioAttivita || null,
+        sostegno: sostegno || null,
+      },
+      update: {
+        heroTitle: heroTitle || null,
+        heroSubtitle: heroSubtitle || null,
+        heroLead: heroLead || null,
+        chiSiamo: chiSiamo || null,
+        pubblicazioni: pubblicazioni || null,
+        calendarioAttivita: calendarioAttivita || null,
+        sostegno: sostegno || null,
+      },
+    });
+    revalidatePath("/");
+    redirect("/organizzatori?msg=testi-salvati");
+  } catch (e) {
+    console.error(e);
+    redirect(
+      `/organizzatori?err=${encodeURIComponent("Errore salvataggio testi")}`,
+    );
+  }
+}
+
 export async function createEventAction(formData: FormData) {
   if (!(await isAdminAuthenticated())) {
     redirect(

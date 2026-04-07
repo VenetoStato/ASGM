@@ -1,20 +1,102 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/auth-admin";
+import { getSiteCopy } from "@/lib/db-public";
+import type { SiteCopyResolved } from "@/lib/site-copy";
 import {
   createAnnouncementAction,
   createEventAction,
   logoutFormAction,
+  saveSiteCopyAction,
 } from "./actions";
 
 export const metadata = {
-  title: "Organizzatori — ASGM",
+  title: "Organizzatori — Gruppo micologico Sandonatese",
   robots: { index: false, follow: false },
 };
 
-function Dashboard() {
+function Dashboard({ siteCopy }: { siteCopy: SiteCopyResolved }) {
   return (
     <div className="flex flex-col gap-10">
+      <section className="rounded-2xl border border-emerald-200/80 bg-emerald-50/40 p-5 shadow-sm sm:p-6">
+        <h2 className="text-lg font-semibold text-emerald-950">
+          Testi homepage
+        </h2>
+        <p className="mt-1 text-sm text-stone-600">
+          Modifica titoli, introduzione e i blocchi informativi (visibili in
+          home). Campo vuoto = testo predefinito del sito.
+        </p>
+        <form action={saveSiteCopyAction} className="mt-4 flex flex-col gap-3">
+          <label className="text-sm font-medium text-stone-800">
+            Titolo principale
+            <input
+              name="heroTitle"
+              defaultValue={siteCopy.heroTitle}
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 text-base"
+            />
+          </label>
+          <label className="text-sm font-medium text-stone-800">
+            Sottotitolo (es. città)
+            <input
+              name="heroSubtitle"
+              defaultValue={siteCopy.heroSubtitle}
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 text-base"
+            />
+          </label>
+          <label className="text-sm font-medium text-stone-800">
+            Introduzione in evidenza
+            <textarea
+              name="heroLead"
+              defaultValue={siteCopy.heroLead}
+              rows={3}
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 text-base"
+            />
+          </label>
+          <label className="text-sm font-medium text-stone-800">
+            Chi siamo
+            <textarea
+              name="chiSiamo"
+              defaultValue={siteCopy.chiSiamo}
+              rows={6}
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 text-base"
+            />
+          </label>
+          <label className="text-sm font-medium text-stone-800">
+            Pubblicazioni e materiali
+            <textarea
+              name="pubblicazioni"
+              defaultValue={siteCopy.pubblicazioni}
+              rows={5}
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 text-base"
+            />
+          </label>
+          <label className="text-sm font-medium text-stone-800">
+            Calendario e attività (testo)
+            <textarea
+              name="calendarioAttivita"
+              defaultValue={siteCopy.calendarioAttivita}
+              rows={4}
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 text-base"
+            />
+          </label>
+          <label className="text-sm font-medium text-stone-800">
+            Sostegno (5×1000, contributi)
+            <textarea
+              name="sostegno"
+              defaultValue={siteCopy.sostegno}
+              rows={5}
+              className="mt-1 w-full rounded-lg border border-stone-300 px-3 py-2 text-base"
+            />
+          </label>
+          <button
+            type="submit"
+            className="rounded-xl bg-emerald-900 py-3 text-base font-medium text-white active:bg-emerald-950"
+          >
+            Salva testi homepage
+          </button>
+        </form>
+      </section>
+
       <section className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm sm:p-6">
         <h2 className="text-lg font-semibold text-emerald-950">
           Nuovo annuncio
@@ -119,13 +201,14 @@ export default async function OrganizzatoriPage({ searchParams }: Props) {
   const sp = await searchParams;
   const err = sp.err;
   const msg = sp.msg;
+  const siteCopy = await getSiteCopy();
 
   if (hasPassword && !ok) {
     redirect("/admin/login?next=/organizzatori");
   }
 
   return (
-    <main className="mx-auto w-full max-w-lg flex-1 px-4 py-8 sm:py-12">
+    <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-8 sm:py-12">
       <Link
         href="/"
         className="text-sm font-medium text-emerald-800 hover:underline"
@@ -136,7 +219,7 @@ export default async function OrganizzatoriPage({ searchParams }: Props) {
         Area organizzatori
       </h1>
       <p className="mt-2 text-sm text-stone-600">
-        Aggiungi annunci con immagini e prossime attività. Password in{" "}
+        Testi della home, annunci con immagini e prossime attività. Password in{" "}
         <code className="rounded bg-stone-200 px-1">ADMIN_PASSWORD</code>.
       </p>
 
@@ -156,6 +239,11 @@ export default async function OrganizzatoriPage({ searchParams }: Props) {
           Attività salvata.
         </p>
       )}
+      {msg === "testi-salvati" && (
+        <p className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+          Testi homepage salvati.
+        </p>
+      )}
 
       {!hasPassword && (
         <p className="mt-4 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
@@ -164,7 +252,7 @@ export default async function OrganizzatoriPage({ searchParams }: Props) {
         </p>
       )}
 
-      {hasPassword && ok && <Dashboard />}
+      {hasPassword && ok && <Dashboard siteCopy={siteCopy} />}
     </main>
   );
 }

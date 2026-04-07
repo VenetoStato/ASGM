@@ -14,8 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ASGM — Micologia",
-  description: "Sito del gruppo micologico: annunci, date, eventi e schede funghi.",
+  title:
+    "Gruppo Micologico Culturale Sandonatese | San Donà di Piave",
+  description:
+    "Gruppo micologico a San Donà di Piave: annunci, calendario, pubblicazioni e schede funghi.",
 };
 
 export const viewport = {

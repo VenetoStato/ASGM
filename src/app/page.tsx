@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {
+  getSiteCopy,
   listPublishedAnnouncements,
   listUpcomingEvents,
 } from "@/lib/db-public";
@@ -20,7 +21,8 @@ function formatEventWhen(d: Date) {
 }
 
 export default async function Home() {
-  const [announcements, upcoming] = await Promise.all([
+  const [copy, announcements, upcoming] = await Promise.all([
+    getSiteCopy(),
     listPublishedAnnouncements(5),
     listUpcomingEvents(6),
   ]);
@@ -37,16 +39,24 @@ export default async function Home() {
         />
         <div className="relative mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200/90">
-            Associazione / gruppo
+            Micologia · territorio
           </p>
-          <h1 className="mt-3 text-balance text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-[2.5rem]">
-            Gruppo micologico ASGM
+          <h1 className="mt-3 text-balance text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-[2.35rem]">
+            {copy.heroTitle}
           </h1>
+          <p className="mt-2 text-lg font-medium text-amber-100/95 sm:text-xl">
+            {copy.heroSubtitle}
+          </p>
           <p className="mx-auto mt-4 max-w-lg text-pretty text-base leading-relaxed text-amber-100/90 sm:text-lg">
-            Annunci, uscite sul territorio e schede funghi. Ottimizzato per il
-            telefono: scorri e usa il menu in alto.
+            {copy.heroLead}
           </p>
           <div className="mt-10 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap">
+            <Link
+              href="/#chi-siamo"
+              className="rounded-2xl border border-white/25 bg-white/10 px-6 py-3.5 text-center text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 active:scale-[0.98] sm:min-w-[11rem]"
+            >
+              Chi siamo
+            </Link>
             <Link
               href="/#annunci"
               className="rounded-2xl bg-white px-6 py-3.5 text-center text-base font-semibold text-stone-900 shadow-lg shadow-black/20 transition hover:bg-amber-50 active:scale-[0.98] sm:min-w-[11rem]"
@@ -70,6 +80,50 @@ export default async function Home() {
       </section>
 
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-14 px-4 pt-12">
+        <section id="chi-siamo" className="scroll-mt-28">
+          <h2 className="border-b border-stone-200/90 pb-4 text-2xl font-bold tracking-tight text-emerald-950">
+            Chi siamo
+          </h2>
+          <p className="mt-6 whitespace-pre-wrap text-pretty text-[15px] leading-relaxed text-stone-700 sm:text-base">
+            {copy.chiSiamo}
+          </p>
+        </section>
+
+        <section
+          id="pubblicazioni"
+          className="grid scroll-mt-28 gap-4 sm:grid-cols-2"
+        >
+          <div className="rounded-2xl border border-stone-200/90 bg-white p-5 shadow-sm ring-1 ring-stone-900/[0.03] sm:p-6">
+            <h2 className="text-lg font-bold text-emerald-950">
+              Pubblicazioni e materiali
+            </h2>
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-stone-600 sm:text-[15px]">
+              {copy.pubblicazioni}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-stone-200/90 bg-white p-5 shadow-sm ring-1 ring-stone-900/[0.03] sm:p-6">
+            <h2 className="text-lg font-bold text-emerald-950">
+              Calendario e attività
+            </h2>
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-stone-600 sm:text-[15px]">
+              {copy.calendarioAttivita}
+            </p>
+            <Link
+              href="/eventi"
+              className="mt-4 inline-block text-sm font-semibold text-emerald-800 hover:underline"
+            >
+              Vai al calendario →
+            </Link>
+          </div>
+        </section>
+
+        <section id="sostegno" className="scroll-mt-28 rounded-2xl border border-amber-200/90 bg-amber-50/80 p-5 sm:p-6">
+          <h2 className="text-lg font-bold text-emerald-950">Sostegno</h2>
+          <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-stone-800 sm:text-[15px]">
+            {copy.sostegno}
+          </p>
+        </section>
+
         <section id="annunci" className="scroll-mt-28">
           <div className="flex flex-wrap items-end justify-between gap-3 border-b border-stone-200/90 pb-4">
             <div>

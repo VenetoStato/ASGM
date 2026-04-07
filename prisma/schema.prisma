@@ -76,3 +76,16 @@ model Announcement {
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
 }
+
+/// Testi homepage (un solo record, id = "default")
+model SiteSettings {
+  id                 String   @id @default("default")
+  heroTitle          String?
+  heroSubtitle       String?
+  heroLead           String?  @db.Text
+  chiSiamo           String?  @db.Text
+  pubblicazioni      String?  @db.Text
+  calendarioAttivita String?  @db.Text
+  sostegno           String?  @db.Text
+  updatedAt          DateTime @updatedAt
+}

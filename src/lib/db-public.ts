@@ -4,6 +4,20 @@ import {
   EventStatus,
 } from "@/generated/prisma/client";
 import { getPrisma } from "@/lib/prisma";
+import { mergeSiteCopy, type SiteCopyResolved } from "@/lib/site-copy";
+
+/** Testi homepage (hero + blocchi informativi), con fallback ai default. */
+export async function getSiteCopy(): Promise<SiteCopyResolved> {
+  try {
+    const prisma = getPrisma();
+    const row = await prisma.siteSettings.findUnique({
+      where: { id: "default" },
+    });
+    return mergeSiteCopy(row);
+  } catch {
+    return mergeSiteCopy(null);
+  }
+}
 
 export async function listPublishedEvents() {
   try {

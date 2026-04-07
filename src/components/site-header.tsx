@@ -2,6 +2,8 @@ import Link from "next/link";
 
 const links = [
   { href: "/", label: "Home" },
+  { href: "/#chi-siamo", label: "Chi siamo" },
+  { href: "/#pubblicazioni", label: "Info" },
   { href: "/#annunci", label: "Annunci" },
   { href: "/#date", label: "Date" },
   { href: "/eventi", label: "Eventi" },
@@ -15,12 +17,12 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-emerald-950/20 bg-emerald-950 text-emerald-50 shadow-md shadow-emerald-950/20 backdrop-blur-md">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3 sm:py-3.5">
-        <Link href="/" className="group flex shrink-0 flex-col gap-0">
-          <span className="text-base font-bold tracking-tight sm:text-lg">
-            ASGM
+        <Link href="/" className="group flex min-w-0 shrink-0 flex-col gap-0">
+          <span className="line-clamp-2 text-left text-[13px] font-bold leading-tight tracking-tight text-emerald-50 sm:text-sm">
+            G.M.C. Sandonatese
           </span>
           <span className="text-[10px] font-medium uppercase tracking-widest text-emerald-400/90 sm:text-[11px]">
-            Micologia
+            San Donà · micologia
           </span>
         </Link>
         <nav
