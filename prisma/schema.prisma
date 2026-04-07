@@ -42,6 +42,7 @@ model Species {
   lastSyncedAt       DateTime?
   imageUrl           String?
   imageAttribution   String?   @db.Text
+  gbifTaxonKey       String?
   autoImported       Boolean   @default(false)
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt

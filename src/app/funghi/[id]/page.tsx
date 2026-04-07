@@ -95,7 +95,10 @@ export default async function SpeciesDetailPage({ params }: Props) {
             </div>
           </ContentCard>
 
-          {(s.sourceUrl || s.autoImported || s.wikidataId) && (
+          {(s.sourceUrl ||
+            s.autoImported ||
+            s.wikidataId ||
+            s.gbifTaxonKey) && (
             <ContentCard className="mt-6" hover={false}>
               <SectionHeader
                 compact
@@ -117,7 +120,22 @@ export default async function SpeciesDetailPage({ params }: Props) {
                       rel="noopener noreferrer"
                       className="font-semibold text-emerald-800 underline decoration-emerald-800/30"
                     >
-                      Apri la fonte (Wikipedia / esterno) →
+                      Voce Wikipedia (italiano) →
+                    </a>
+                  </li>
+                )}
+                {s.gbifTaxonKey && (
+                  <li>
+                    <span className="font-medium text-stone-600">
+                      Tassonomia (GBIF Backbone):{" "}
+                    </span>
+                    <a
+                      href={`https://www.gbif.org/species/${encodeURIComponent(s.gbifTaxonKey)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-emerald-800 underline"
+                    >
+                      Scheda GBIF {s.gbifTaxonKey}
                     </a>
                   </li>
                 )}
