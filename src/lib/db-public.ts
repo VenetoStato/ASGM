@@ -95,29 +95,6 @@ export async function getSpeciesById(id: string) {
   }
 }
 
-/** Prossimo evento pubblicato o, in assenza, ultimo annuncio — per fascia “In evidenza”. */
-export async function getHomeSpotlight() {
-  try {
-    const prisma = getPrisma();
-    const now = new Date();
-    const [nextEvent, latestAnn] = await Promise.all([
-      prisma.event.findFirst({
-        where: { status: EventStatus.PUBLISHED, startsAt: { gte: now } },
-        orderBy: { startsAt: "asc" },
-      }),
-      prisma.announcement.findFirst({
-        where: { status: AnnouncementStatus.PUBLISHED },
-        orderBy: { publishedAt: "desc" },
-      }),
-    ]);
-    if (nextEvent) return { kind: "event" as const, item: nextEvent };
-    if (latestAnn) return { kind: "announcement" as const, item: latestAnn };
-    return null;
-  } catch {
-    return null;
-  }
-}
-
 /** Ultima specie importata automaticamente (ultime ~14 giorni) per badge “della settimana”. */
 export async function getWeeklyFeaturedSpecies() {
   try {

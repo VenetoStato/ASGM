@@ -9,7 +9,6 @@ import {
   fetchFacebookPageMeta,
 } from "@/lib/facebook-posts";
 import {
-  getHomeSpotlight,
   getSiteCopy,
   getWeeklyFeaturedSpecies,
   listPublishedAnnouncements,
@@ -60,7 +59,6 @@ export default async function Home() {
     species,
     fbPosts,
     pageMeta,
-    spotlight,
     weeklySpecies,
   ] = await Promise.all([
     getSiteCopy(),
@@ -69,7 +67,6 @@ export default async function Home() {
     listSpecies(),
     fetchFacebookGraphPosts(),
     fetchFacebookPageMeta(),
-    getHomeSpotlight(),
     getWeeklyFeaturedSpecies(),
   ]);
 
@@ -112,8 +109,8 @@ export default async function Home() {
             {copy.heroLead}
           </p>
           <div className="mt-6 grid grid-cols-2 gap-2 sm:mt-8 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
-            <Link href="/#in-evidenza" className={ctaPrimary}>
-              In evidenza
+            <Link href="/#date" className={ctaPrimary}>
+              Prossime date
             </Link>
             <Link href="/#galleria" className={ctaGhost}>
               Galleria foto
@@ -149,64 +146,52 @@ export default async function Home() {
         </div>
       </section>
 
-      <Section id="in-evidenza" band="paper" narrow className="!pt-4 sm:!pt-5">
+      <Section id="date" band="paper" narrow className="!pt-4 sm:!pt-5">
         <SectionHeader
           compact
-          title="In evidenza"
-          description="La prossima attività in programma o l’ultimo annuncio pubblicato."
+          title="Prossime date"
+          description="Uscite e attività in programma (si aggiorna in base al calendario)."
         />
-        <div className="mt-3 sm:mt-4">
-          {!spotlight && (
-            <EmptyState title="Nessun contenuto in evidenza al momento.">
-              Torna a trovarci presto o consulta il calendario e gli annunci
-              qui sotto.
-            </EmptyState>
+        <div className="mb-3 flex justify-end">
+          <Link
+            href="/eventi"
+            className="rounded-full bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-950 ring-1 ring-emerald-900/15 hover:bg-emerald-100"
+          >
+            Calendario completo
+          </Link>
+        </div>
+        <div className="mt-1">
+          {!upcoming && (
+            <EmptyState title="Calendario non disponibile al momento." />
           )}
-          {spotlight?.kind === "event" && (
-            <ContentCard>
-              <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">
-                Prossima attività
-              </p>
-              <p className="mt-2 text-lg font-semibold text-emerald-950">
-                {spotlight.item.title}
-              </p>
-              <p className="mt-1 text-sm text-stone-600">
-                {formatEventWhen(spotlight.item.startsAt)}
-                {spotlight.item.location
-                  ? ` · ${spotlight.item.location}`
-                  : ""}
-              </p>
-              {spotlight.item.description && (
-                <p className="mt-2 text-sm leading-relaxed text-stone-700">
-                  {spotlight.item.description}
-                </p>
-              )}
-              <Link
-                href="/eventi"
-                className="mt-4 inline-block text-sm font-semibold text-emerald-800 hover:underline"
-              >
-                Vedi tutti gli eventi →
-              </Link>
-            </ContentCard>
+          {upcoming && upcoming.length === 0 && (
+            <EmptyState title="Nessuna data futura in elenco." />
           )}
-          {spotlight?.kind === "announcement" && (
-            <ContentCard>
-              <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">
-                Ultimo annuncio
-              </p>
-              <p className="mt-2 text-lg font-semibold text-emerald-950">
-                {spotlight.item.title}
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-stone-700 sm:text-[15px]">
-                {spotlight.item.body}
-              </p>
-              <Link
-                href="/annunci"
-                className="mt-4 inline-block text-sm font-semibold text-emerald-800 hover:underline"
-              >
-                Tutti gli annunci →
-              </Link>
-            </ContentCard>
+          {upcoming && upcoming.length > 0 && (
+            <ul className="flex flex-col gap-2">
+              {upcoming.map((ev) => (
+                <li key={ev.id}>
+                  <ContentCard>
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
+                      {formatEventWhen(ev.startsAt)}
+                    </p>
+                    <p className="mt-1.5 text-base font-semibold text-emerald-950 sm:text-lg">
+                      {ev.title}
+                    </p>
+                    {ev.location && (
+                      <p className="mt-1 text-sm text-stone-600">
+                        {ev.location}
+                      </p>
+                    )}
+                    {ev.description && (
+                      <p className="mt-2 text-sm leading-relaxed text-stone-600">
+                        {ev.description}
+                      </p>
+                    )}
+                  </ContentCard>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       </Section>
@@ -295,8 +280,8 @@ export default async function Home() {
           <FacebookSection
             graphPosts={fbPosts}
             pageMeta={pageMeta}
-            postLimit={2}
             showHeader={false}
+            compact
           />
         </CompactDisclosure>
       </Section>
@@ -369,76 +354,6 @@ export default async function Home() {
         </CompactDisclosure>
       </Section>
 
-      <Section id="date" band="default">
-        <CompactDisclosure
-          title="Prossime date"
-          subtitle="Uscite e attività in programma"
-          defaultOpen
-        >
-          <div className="mb-3 flex justify-end">
-            <Link
-              href="/eventi"
-              className="rounded-full bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-950 ring-1 ring-emerald-900/15 hover:bg-emerald-100"
-            >
-              Calendario completo
-            </Link>
-          </div>
-          <div className="mt-1">
-          {!upcoming && (
-            <EmptyState title="Calendario non disponibile al momento." />
-          )}
-          {upcoming && upcoming.length === 0 && (
-            <EmptyState title="Nessuna data futura in elenco." />
-          )}
-          {upcoming && upcoming.length > 0 && (
-            <ul className="flex flex-col gap-2">
-              {upcoming.map((ev) => (
-                <li key={ev.id}>
-                  <ContentCard>
-                    <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
-                      {formatEventWhen(ev.startsAt)}
-                    </p>
-                    <p className="mt-1.5 text-base font-semibold text-emerald-950 sm:text-lg">
-                      {ev.title}
-                    </p>
-                    {ev.location && (
-                      <p className="mt-1 text-sm text-stone-600">
-                        {ev.location}
-                      </p>
-                    )}
-                    {ev.description && (
-                      <p className="mt-2 text-sm leading-relaxed text-stone-600">
-                        {ev.description}
-                      </p>
-                    )}
-                  </ContentCard>
-                </li>
-              ))}
-            </ul>
-          )}
-          </div>
-        </CompactDisclosure>
-      </Section>
-
-      <Section id="nav-extra" band="muted" className="pb-6 sm:pb-8">
-        <p className="text-center text-sm text-stone-600">
-          <Link
-            href="/funghi"
-            className="font-semibold text-emerald-800 underline decoration-emerald-800/30 underline-offset-2"
-          >
-            Schede funghi
-          </Link>
-          <span className="mx-2 text-stone-400" aria-hidden>
-            ·
-          </span>
-          <Link
-            href="/news"
-            className="font-semibold text-emerald-800 underline decoration-emerald-800/30 underline-offset-2"
-          >
-            News
-          </Link>
-        </p>
-      </Section>
     </main>
   );
 }

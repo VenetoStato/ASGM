@@ -12,14 +12,14 @@ const PAGE_LINKS = [
 ] as const;
 
 const HOME_SECTION_LINKS = [
-  { href: "/#in-evidenza", label: "In evidenza" },
+  { href: "/#date", label: "Prossime date" },
+  { href: "/#galleria", label: "Galleria" },
   { href: "/#chi-siamo", label: "Chi siamo" },
   { href: "/#pubblicazioni", label: "Pubblicazioni" },
   { href: "/#sostegno", label: "Sostegno" },
   { href: "/#schede", label: "Schede funghi" },
   { href: "/#annunci", label: "Annunci" },
   { href: "/#facebook", label: "Facebook" },
-  { href: "/#date", label: "Prossime date" },
 ] as const;
 
 const ORG_LINK = {

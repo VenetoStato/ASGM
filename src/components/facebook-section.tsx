@@ -29,6 +29,8 @@ type Props = {
   postLimit?: number;
   /** Se false, nasconde il titolo grande (es. dentro un disclosure). */
   showHeader?: boolean;
+  /** true = solo timeline + un CTA (niente card Graph duplicate). */
+  compact?: boolean;
 };
 
 export function FacebookSection({
@@ -36,11 +38,14 @@ export function FacebookSection({
   pageMeta,
   postLimit = 6,
   showHeader = true,
+  compact = false,
 }: Props) {
   const cards =
-    graphPosts && postLimit > 0
+    !compact && graphPosts && postLimit > 0
       ? graphPosts.slice(0, postLimit)
-      : graphPosts;
+      : !compact
+        ? graphPosts
+        : null;
   const hasCards = Boolean(cards && cards.length > 0);
 
   return (
@@ -60,23 +65,25 @@ export function FacebookSection({
           }
         />
       ) : (
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <p className="text-xs text-stone-600 sm:text-sm">
-            {pageMeta?.name
-              ? `Pagina «${pageMeta.name}»`
-              : "Pagina Facebook del gruppo"}
-          </p>
-          <FacebookPageLink
-            href={FACEBOOK_PAGE_URL}
-            variant="solid"
-            className="py-2 text-xs sm:text-sm"
-          >
-            Apri su Facebook
-          </FacebookPageLink>
-        </div>
+        !compact && (
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs text-stone-600 sm:text-sm">
+              {pageMeta?.name
+                ? `Pagina «${pageMeta.name}»`
+                : "Pagina Facebook del gruppo"}
+            </p>
+            <FacebookPageLink
+              href={FACEBOOK_PAGE_URL}
+              variant="solid"
+              className="py-2 text-xs sm:text-sm"
+            >
+              Apri su Facebook
+            </FacebookPageLink>
+          </div>
+        )
       )}
 
-      {(pageMeta?.pictureUrl || pageMeta?.name) && (
+      {!compact && (pageMeta?.pictureUrl || pageMeta?.name) && (
         <div className="mt-3 flex items-center gap-3 rounded-xl border border-stone-200/90 bg-white px-3 py-2 shadow-sm sm:mt-4 sm:px-4 sm:py-3">
           {pageMeta.pictureUrl && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -134,9 +141,6 @@ export function FacebookSection({
                   >
                     Apri il post su Facebook →
                   </a>
-                  <p className="mt-3 text-xs text-stone-500">
-                    Contenuto pubblicato sulla pagina Facebook del gruppo.
-                  </p>
                 </div>
               </ContentCard>
             </li>
@@ -144,23 +148,33 @@ export function FacebookSection({
         </ul>
       )}
 
-      {!hasCards && (
+      {!compact && !hasCards && (
         <p className="mt-4 rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-600">
-          Per mostrare qui l&apos;anteprima dei post serve il token di pagina
-          configurato sul server; in ogni caso il riquadro sotto e il pulsante
-          aprono sempre la pagina aggiornata.
+          Per le anteprime dei singoli post serve{" "}
+          <code className="rounded bg-stone-200/80 px-1 text-xs">
+            FACEBOOK_PAGE_ACCESS_TOKEN
+          </code>{" "}
+          su Vercel. La timeline qui sotto funziona comunque.
         </p>
       )}
 
-      <div className="mt-4 rounded-xl border border-stone-200/90 bg-[var(--surface-muted)] p-2 sm:p-4 sm:mt-5">
-        <p className="mb-2 text-center text-xs text-stone-600 sm:text-sm">
-          Timeline della pagina Facebook: puoi scorrere dentro il riquadro. Se non
-          si carica, apri la pagina con i pulsanti qui sotto.
-        </p>
+      <div
+        className={
+          compact
+            ? "mt-0 rounded-xl border border-stone-200/90 bg-[var(--surface-muted)] p-2 sm:p-4"
+            : "mt-4 rounded-xl border border-stone-200/90 bg-[var(--surface-muted)] p-2 sm:p-4 sm:mt-5"
+        }
+      >
+        {!compact && (
+          <p className="mb-2 text-center text-xs text-stone-600 sm:text-sm">
+            Timeline della pagina: scorri nel riquadro. Se non si carica, apri con
+            il pulsante sotto.
+          </p>
+        )}
         <FacebookEmbedWithFallback pageUrl={FACEBOOK_PAGE_URL} />
         <div className="mt-4 flex justify-center">
           <FacebookPageLink href={FACEBOOK_PAGE_URL} variant="outline">
-            Pagina Facebook del gruppo
+            Apri la pagina su Facebook
           </FacebookPageLink>
         </div>
       </div>
