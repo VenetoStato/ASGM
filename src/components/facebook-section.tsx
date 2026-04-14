@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { FacebookPageMeta, FacebookPost } from "@/lib/facebook-posts";
 import { FACEBOOK_PAGE_URL } from "@/lib/public-site";
 import { FacebookPageLink } from "./facebook-brand";

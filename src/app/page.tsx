@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { FacebookIcon } from "@/components/facebook-brand";
 import { FacebookSection } from "@/components/facebook-section";
@@ -23,6 +24,8 @@ import {
   Section,
   SectionHeader,
 } from "@/components/ui/section";
+import { HomeGallerySection } from "@/components/home-gallery-section";
+import { HOME_HERO_IMAGE } from "@/lib/home-gallery";
 
 function parseImages(raw: unknown): string[] {
   if (!raw || !Array.isArray(raw)) return [];
@@ -77,8 +80,19 @@ export default async function Home() {
   return (
     <main className="flex flex-1 flex-col">
       <section className="relative overflow-hidden border-b border-amber-900/25 bg-gradient-to-br from-[#0c1f14] via-emerald-950 to-stone-950 px-4 py-6 text-white sm:py-10 md:py-14">
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <Image
+            src={HOME_HERO_IMAGE.src}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-35"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a1810]/95 via-emerald-950/88 to-[#0c1f14]/75" />
+        </div>
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          className="pointer-events-none absolute inset-0 opacity-[0.05]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M40 0L60 20v20L40 60 20 40V20z'/%3E%3C/svg%3E")`,
           }}
@@ -88,7 +102,7 @@ export default async function Home() {
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-200/85">
             Gruppo micologico · Bassa · Veneto
           </p>
-          <h1 className="mt-4 text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-[2.6rem]">
+          <h1 className="mt-4 text-balance text-3xl font-semibold leading-tight tracking-tight drop-shadow-sm sm:text-4xl md:text-[2.6rem]">
             {copy.heroTitle}
           </h1>
           <p className="mt-3 text-lg font-medium text-amber-100/95 sm:text-xl">
@@ -100,6 +114,9 @@ export default async function Home() {
           <div className="mt-6 grid grid-cols-2 gap-2 sm:mt-8 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
             <Link href="/#in-evidenza" className={ctaPrimary}>
               In evidenza
+            </Link>
+            <Link href="/#galleria" className={ctaGhost}>
+              Galleria foto
             </Link>
             <Link href="/#chi-siamo" className={ctaGhost}>
               Chi siamo
@@ -117,6 +134,18 @@ export default async function Home() {
               Facebook
             </Link>
           </div>
+          <p className="mx-auto mt-5 max-w-lg text-[11px] leading-snug text-stone-300/90">
+            Foto hero: porcini in bosco —{" "}
+            <a
+              href="https://commons.wikimedia.org/wiki/File:Boletus_edulis_(Tottoli)_01.jpg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-stone-400/60 underline-offset-2"
+            >
+              Tottoli / CC BY-SA 3.0
+            </a>{" "}
+            (Wikimedia Commons)
+          </p>
         </div>
       </section>
 
@@ -176,6 +205,8 @@ export default async function Home() {
           )}
         </div>
       </Section>
+
+      <HomeGallerySection />
 
       <Section band="default">
         <CompactDisclosure

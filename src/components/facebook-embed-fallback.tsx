@@ -77,7 +77,6 @@ export function FacebookEmbedWithFallback({ pageUrl }: Props) {
     if (!root) return;
 
     let cancelled = false;
-    let blockTimer: number | undefined;
 
     const maybeUnblock = () => {
       const iframe = findFbIframe(root);
@@ -93,11 +92,11 @@ export function FacebookEmbedWithFallback({ pageUrl }: Props) {
       if (cancelled) return;
       if (maybeUnblock()) {
         window.clearInterval(interval);
-        if (blockTimer) window.clearTimeout(blockTimer);
+        window.clearTimeout(blockTimer);
       }
     }, RECHECK_EVERY_MS);
 
-    blockTimer = window.setTimeout(() => {
+    const blockTimer = window.setTimeout(() => {
       if (cancelled) return;
       if (!maybeUnblock()) {
         const iframe = findFbIframe(root);
@@ -112,7 +111,7 @@ export function FacebookEmbedWithFallback({ pageUrl }: Props) {
     return () => {
       cancelled = true;
       window.clearInterval(interval);
-      if (blockTimer) window.clearTimeout(blockTimer);
+      window.clearTimeout(blockTimer);
     };
   }, [sdkLoaded, pluginWidth]);
 

@@ -6,6 +6,7 @@ type SpeciesCard = {
   name: string;
   scientificName: string | null;
   edibility: string | null;
+  imageUrl?: string | null;
 };
 
 type Props = {
@@ -62,8 +63,20 @@ export function FeaturedSpeciesSection({
               <li key={s.id}>
                 <Link
                   href={`/funghi/${s.id}`}
-                  className="relative block h-full rounded-xl border border-stone-200/90 bg-white p-3 shadow-sm ring-1 ring-stone-900/[0.03] transition hover:border-emerald-200/80 hover:shadow-md sm:p-4"
+                  className="relative block h-full overflow-hidden rounded-xl border border-stone-200/90 bg-white shadow-sm ring-1 ring-stone-900/[0.03] transition hover:border-emerald-200/80 hover:shadow-md"
                 >
+                  {s.imageUrl && (
+                    <div className="relative aspect-[2.2/1] w-full overflow-hidden bg-stone-200/80">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={s.imageUrl}
+                        alt={`${s.name}${s.scientificName ? ` (${s.scientificName})` : ""}`}
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+                  <div className="p-3 sm:p-4">
                   {weeklyHighlightId === s.id && (
                     <span className="absolute right-3 top-3 rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-950 ring-1 ring-amber-300/80">
                       In evidenza
@@ -81,6 +94,7 @@ export function FeaturedSpeciesSection({
                   <span className="mt-3 inline-block text-sm font-semibold text-emerald-800">
                     Apri scheda →
                   </span>
+                  </div>
                 </Link>
               </li>
             ))
