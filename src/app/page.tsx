@@ -65,7 +65,7 @@ export default async function Home() {
   ] = await Promise.all([
     getSiteCopy(),
     listPublishedAnnouncements(3),
-    listUpcomingEvents(4),
+    listUpcomingEvents(8),
     listSpecies(),
     fetchFacebookGraphPosts(),
     fetchFacebookPageMeta(),
@@ -176,6 +176,11 @@ export default async function Home() {
                   ? ` · ${spotlight.item.location}`
                   : ""}
               </p>
+              {spotlight.item.description && (
+                <p className="mt-2 text-sm leading-relaxed text-stone-700">
+                  {spotlight.item.description}
+                </p>
+              )}
               <Link
                 href="/eventi"
                 className="mt-4 inline-block text-sm font-semibold text-emerald-800 hover:underline"
@@ -399,6 +404,11 @@ export default async function Home() {
                     {ev.location && (
                       <p className="mt-1 text-sm text-stone-600">
                         {ev.location}
+                      </p>
+                    )}
+                    {ev.description && (
+                      <p className="mt-2 text-sm leading-relaxed text-stone-600">
+                        {ev.description}
                       </p>
                     )}
                   </ContentCard>

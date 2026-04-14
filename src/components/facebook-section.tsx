@@ -152,10 +152,10 @@ export function FacebookSection({
         </p>
       )}
 
-      <div className="mt-4 rounded-xl border border-stone-200/90 bg-[var(--surface-muted)] p-3 sm:mt-5 sm:p-4">
-        <p className="mb-3 text-center text-xs text-stone-600 sm:text-sm">
-          Timeline della pagina (aggiornata da Facebook). Se non vedi il
-          riquadro, usa il pulsante qui sotto.
+      <div className="mt-4 rounded-xl border border-stone-200/90 bg-[var(--surface-muted)] p-2 sm:p-4 sm:mt-5">
+        <p className="mb-2 text-center text-xs text-stone-600 sm:text-sm">
+          Timeline della pagina Facebook: puoi scorrere dentro il riquadro. Se non
+          si carica, apri la pagina con i pulsanti qui sotto.
         </p>
         <FacebookEmbedWithFallback pageUrl={FACEBOOK_PAGE_URL} />
         <div className="mt-4 flex justify-center">
