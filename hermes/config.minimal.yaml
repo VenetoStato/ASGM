@@ -1,0 +1,8 @@
+# Snippet per ~/.hermes/config.yaml (generato da wsl-bootstrap.sh se manca).
+# __WINDOWS_HOST__ viene sostituito con l IP dell host Windows visto da WSL2.
+
+model:
+  default: gemma4:e4b-it-q4_K_M
+  provider: custom
+  base_url: http://__WINDOWS_HOST__:11434/v1
+  context_length: 8192

@@ -14,6 +14,10 @@
     "openclaw:gateway": "set OLLAMA_API_KEY=ollama-local&& npx openclaw@latest gateway",
     "openclaw:start": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/start-openclaw-gateway.ps1",
     "openclaw:onboard": "npx openclaw@latest onboard",
+    "hermes:wsl-bootstrap": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/hermes-wsl-bootstrap.ps1",
+    "ollama:pull-gemma4": "ollama pull gemma4:e4b-it-q4_K_M",
+    "ollama:free-vram": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/ollama-free-vram.ps1",
+    "ollama:idle-unload": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/ollama-free-vram.ps1 -ConfigureIdleUnload",
     "test:ingest": "node scripts/post-asgm-ingest.mjs"
   },
   "dependencies": {

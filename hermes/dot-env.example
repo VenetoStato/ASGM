@@ -1,0 +1,19 @@
+# Copia questo file in ~/.hermes/.env (dentro Ubuntu WSL) e compila.
+# chmod 600 ~/.hermes/.env
+#
+# Riferimento: https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram/
+
+# Da @BotFather dopo /newbot (segreto: non condividere, non committare)
+TELEGRAM_BOT_TOKEN=PASTE_BOTFATHER_TOKEN_HERE
+
+# Solo il TUO account Telegram (numero intero). Da @userinfobot o @get_id_bot
+# Un solo ID = solo tu puoi usare il bot. Piu ID: separali con virgola (senza spazi).
+TELEGRAM_ALLOWED_USERS=PASTE_YOUR_NUMERIC_USER_ID
+
+# Opzionale: canale "home" per cron (di solito il tuo ID se usi solo DM)
+# TELEGRAM_HOME_CHANNEL=
+# TELEGRAM_HOME_CHANNEL_NAME=
+
+# Hermes richiede almeno un provider LLM: qui usiamo Ollama su Windows.
+# Le chiavi cloud sotto servono solo se usi anche OpenRouter / altri provider da .env.
+# OPENROUTER_API_KEY=
