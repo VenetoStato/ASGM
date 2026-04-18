@@ -56,7 +56,7 @@ model:
   default: $GemmaTag
   provider: custom
   base_url: http://HOST_WINDOWS:11434/v1
-  context_length: 8192
+  context_length: 65536
 
 "@ | Write-Host
 

@@ -1,8 +1,24 @@
 # Snippet per ~/.hermes/config.yaml (generato da wsl-bootstrap.sh se manca).
 # __WINDOWS_HOST__ viene sostituito con l IP dell host Windows visto da WSL2.
+#
+# Modelli (scegline uno su Ollama dopo ollama pull):
+#   - qwen2.5-coder:7b  → orientato al codice (consigliato per agent / tool / dev)
+#   - gemma4:e4b-it-q4_K_M → generico Gemma 4
+#   - codegemma:7b → solo codice Google, ma contesto nativo 8K su Ollama (serve context_length: 65536)
 
 model:
   default: gemma4:e4b-it-q4_K_M
   provider: custom
   base_url: http://__WINDOWS_HOST__:11434/v1
-  context_length: 8192
+  context_length: 65536
+
+# Modelli locali (es. Gemma): rinforza identità Hermes e uso strumenti
+agent:
+  tool_use_enforcement: true
+  system_prompt: |
+    Hermes capabilities (you MUST internalize this):
+    - You have SHELL POWER: the terminal tool runs real commands in the agent environment (cwd, packages, git, system introspection). Never claim you "cannot access the terminal" or "have no shell" when terminal is in your tool list — invoke it.
+    - You have CODE ACCESS: read_file, search_files, write_file, patch let you read and change source files in the workspace. Never pretend you cannot see the user's code; open the path and read it.
+    - You are not a passive LLM in a browser: you are Hermes Agent with tools. If the user asks for actions, use tools in the same turn.
+    The user may be on Telegram; keep replies scannable unless they want detail.
+    If the user writes in Italian, reply in Italian.

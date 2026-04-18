@@ -14,6 +14,10 @@ TELEGRAM_ALLOWED_USERS=PASTE_YOUR_NUMERIC_USER_ID
 # TELEGRAM_HOME_CHANNEL=
 # TELEGRAM_HOME_CHANNEL_NAME=
 
-# Hermes richiede almeno un provider LLM: qui usiamo Ollama su Windows.
-# Le chiavi cloud sotto servono solo se usi anche OpenRouter / altri provider da .env.
+# Hermes richiede almeno un provider LLM.
+#
+# OpenAI diretta (es. gpt-5.4-nano in config: provider custom + base_url api.openai.com/v1):
+# OPENAI_API_KEY=sk-...
+#
+# Ollama su Windows / OpenRouter:
 # OPENROUTER_API_KEY=
